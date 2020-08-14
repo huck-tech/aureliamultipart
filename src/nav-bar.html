@@ -1,0 +1,98 @@
+<template>
+	<require from="helpers/NavbarValueConverter"></require>
+	<nav id="clippn-top-nav" class="sl-red regular navbar navbar-inverse navbar-fixed-top">
+		<div class="cobrand col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<ul id="logoset" class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+				<li if.bind="!showingMobileMenu" id="mobile-menu" class="hidden-md-up menu-button">
+				<a role="button" click.delegate="setMobileMenuVisibility(true)"><i class="fa fa-bars fa-2x"></i></a></li>
+				<li if.bind="showingMobileMenu" id="mobile-close" class="hidden-lg-up menu-button"><a role="button" click.delegate="setMobileMenuVisibility(false)"><i class="fa fa-times fa-2x"></i></a>
+				</li>
+				<li>
+				<a click.trigger="navigateTo('')"><img class="logo" src="images/clippn-logo" alt="Clippn"></a>
+				</li>
+			</ul>
+		<div if.bind="showingMobileMenu" class="col-md-12" id="mobileNav">
+			<ul class="nav navbar-nav clippn-dark-gray-bkg">
+				<li class="mobile-user"><i class="fa fa-user"></i>${user.data.firstName} ${user.data.lastName}
+				</li>
+				<li>
+				<a click.trigger="navigateTo('uploads')"><i class="fa fa-cloud-upload"></i> UPLOADS</a>
+				</li>
+				<li><a click.trigger="navigateTo('clips')"><i class="fa fa-film"></i> CLIPS</a>
+				</li>
+				<li><a click.trigger="navigateTo('add-contributor')"><i class="fa fa-user-circle-o"></i> ADD CONTRIBUTOR</a>
+				</li>
+				<li if.bind="isAdmin"><a click.trigger="navigateTo('admin')"><i class="fa fa-gears"></i> ADMIN</a>
+				</li>
+				<li role="separator" class="divider clippn-mid-gray-bkg">
+				</li>
+				<li><a class="dropdown-item" href="mailto:info@clippn.com" click.trigger="setMobileMenuVisibility(false)">Contact Clippn</a>
+				</li>
+				<li role="separator" class="divider clippn-mid-gray-bkg">					
+				</li>
+				<li if.bind="!subdomainIsCorporate">
+				<a click.trigger="navigateTo('user-profile')">User Profile</a>
+				</li>
+				<li if.bind="!subdomainIsCorporate"><a click.trigger="navigateTo('payments')">Payments</a></li>
+				<li if.bind="!subdomainIsCorporate">
+				<a class="dropdown-item">Discounts <span class="coming-soon">Coming Soon!</span></a>
+				</li>
+				<li role="separator" class="divider clippn-mid-gray-bkg">
+				</li>
+				<li>
+				<a class="dropdown-item" click.trigger="navigateTo('faqs')"><i class="fa fa-question-circle"></i> FAQs</a>
+				</li>
+				<li if.bind="!subdomainIsCorporate"><a class="dropdown-item" href="#" click.trigger="setMobileMenuVisibility(false)" data-toggle="modal" data-target="#clippnUniversity"><i class="fa fa-mortar-board"></i> Clippn University</a>
+				</li>
+				<li><a class="dropdown-item" href="#" click.trigger="setMobileMenuVisibility(false)" data-toggle="modal" data-target="#releaseTemplates"><i class="fa fa-file-pdf-o"></i> Release Templates</a>
+				</li>
+				<li role="separator" class="divider clippn-mid-gray-bkg">					
+				</li>
+				<li><a class="dropdown-item" href="#" click.trigger="logout()">Sign Out <i class="fa fa-sign-out"></i></a>
+				</li>
+			</ul>
+		</div>
+		<ul id="menu" class="condensed hidden-md hidden-sm hidden-xs">
+			<li repeat.for="row of router.navigation | navbar" class="tutorial-hide">
+			<a href.bind="row.href" id="${row.settings.linkClass}" class="${row.isActive ? 'selected' : '' }">
+			<i class="fa fa-fw ${row.settings.fontClass}"></i>
+			${row.title}</a>
+			</li>
+		</ul>
+		<div class="btn-group hidden-md hidden-sm hidden-xs nav-upload-item pull-right no-padding" style="margin-right: 9%;">
+			<button class="upload-files-button btn navbar-btn btn-success pull-right" id="upload-clips" data-toggle="modal" data-target="#myUpload"><i class="fa fa-cloud-upload"></i>UPLOAD CLIPS
+			</button>
+		</div>
+		<div id="account-dropdown" class="btn-group hidden-md hidden-sm hidden-xs">
+			<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<i class="fa fa-user"></i>${user.data.firstName} ${user.data.lastName}<b class="caret"></b>
+			</button>
+			<ul class="dropdown-menu clippn-dark-gray-bkg">
+			<!--<li><a class="dropdown-item" href="#">Messages<span class="user-badge">1</span></a></li>-->
+			<li><a class="dropdown-item" href="#/dashboard/contact">Contact Clippn</a>
+			</li>
+			<li role="separator" class="divider clippn-mid-gray-bkg">				
+			</li>
+			<li if.bind="!subdomainIsCorporate"><a class="dropdown-item" click.trigger="navigateTo('user-profile')">User Profile</a>
+			</li>
+			<li if.bind="!subdomainIsCorporate"><a class="dropdown-item" click.trigger="navigateTo('payments')">Payment History</a>
+			</li>
+			<li if.bind="!subdomainIsCorporate"><a class="dropdown-item">Discounts <span class="coming-soon">Coming Soon!</span></a>
+			</li>
+			<li role="separator" class="divider clippn-mid-gray-bkg">				
+			</li>
+			<li if.bind="!subdomainIsCorporate"><a class="dropdown-item" click.trigger="navigateTo('faqs')"><i class="fa fa-question-circle"></i> FAQs</a>
+			</li>
+			<li if.bind="!subdomainIsCorporate"><a class="dropdown-item" href="#" data-toggle="modal" data-target="#clippnUniversity"><i class="fa fa-mortar-board"></i> Clippn University</a>
+			</li>
+			<li><a class="dropdown-item" href="#" data-toggle="modal" data-target="#releaseTemplates"><i class="fa fa-file-pdf-o"></i> Release Templates</a>
+			</li>
+			<li role="separator" class="divider clippn-mid-gray-bkg"s>
+			</li>
+			<li><a class="dropdown-item" href="#" click.trigger="logout()">Sign Out <i class="fa fa-sign-out"></i></a>
+			</li>
+		</ul>
+		</div>
+		</div>
+	</nav>
+</template>

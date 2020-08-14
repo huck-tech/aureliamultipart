@@ -1,0 +1,82 @@
+<template>
+    <div class= "ShooterSuggestionMap col-lg-6">
+        <div class= "sorting">
+            <label class= "sort-by">Sort:</label>
+            <label class= "radio-inline">
+                <input type= "radio" name= "optradio" value= "aToZ" checked.bind= "sortBy">A-Z</label>
+            <label class= "radio-inline">
+                <input type= "radio" name= "optradio" value= "mostToFewest" checked.bind= "sortBy">Most</label>
+            <label class= "radio-inline">
+                <input type= "radio" name= "optradio" value= "fewestToMost" checked.bind= "sortBy">Fewest</label>
+        </div>
+        <div class= "filters">
+            <label class= "filter-by">Show:</label>
+            <label class= "checkbox-inline">
+                <input type= "checkbox" name= "optcheck-hd" checked.bind= "showLessThanHd">&lt;HD</label>
+            <label class= "checkbox-inline">
+                <input type= "checkbox" name= "optcheck-hd" checked.bind= "showHd">HD</label>
+            <label class= "checkbox-inline">
+                <input type= "checkbox" name= "optcheck-4k" checked.bind= "show4K">4K</label>
+            <label class= "checkbox-inline">
+                <input type= "checkbox" name= "optcheck-ed" checked.bind= "showEditorial">Editorial</label>
+            <label class= "checkbox-inline">
+                <input type= "checkbox" name= "optcheck-com" checked.bind= "showCommercial">Commercial</label>
+        </div>
+        <div repeat.for= "category of categories" data-key= "${category.normalizedName}" data-title= "${category.categoryName.toUpperCase()}" class= "${category.normalizedName} variety-matrix-cell variety-matrix-cell-${category.heatIndex} text-center col-xs-2" click.trigger= "setSelectedCategory(category)">
+            <div class= "variety-matrix-clip-count" css= "display: ${showCount ? 'block' : 'none'}">${category.clipCount}</div>
+            <div class= "variety-matrix-icon"></div>
+            <div class= "variety-matrix-cell-label">${category.categoryName}</div>
+            <div class= "variety-matrix-suggested"></div>
+        </div>
+        <div class= "row clearfix">
+            <ul class= "col-xs-12 matrix-legend">
+                <li class= "legend-label">A Few Clips</li>
+                <li class= "legend-cell variety-matrix-cell-1"></li>
+                <li class= "legend-cell variety-matrix-cell-2"></li>
+                <li class= "legend-cell variety-matrix-cell-3"></li>
+                <li class= "legend-cell variety-matrix-cell-4"></li>
+                <li class= "legend-cell variety-matrix-cell-5"></li>
+                <li class= "legend-cell variety-matrix-cell-6"></li>
+                <li class= "legend-cell variety-matrix-cell-7"></li>
+                <li class= "legend-cell variety-matrix-cell-8"></li>
+                <li class= "legend-cell variety-matrix-cell-9"></li>
+                <li class= "legend-cell variety-matrix-cell-10"></li>
+                <li class= "legend-label">Many Clips</li>
+            </ul>
+        </div>
+        <div id= "ShooterSuggestionMap-overlay" if.bind= "selectedCategory !== null" class= "${selectedCategory.normalizedName} matrix-modal">
+            <div class= "front-modal-dialog category-overlay">
+                <button type= "button" class= "close" click.trigger= "clearSelectedCategory()">&times;</button>
+                <div class= "col-sm-12">
+                    <h3>${selectedCategory.categoryName}</h3>
+                    <ul class= "matrix-clip-breakdown clearfix">
+                        <li>
+                            <h4><span class="video-counts">${selectedCategory.clipCount}</span> Clips</h4>
+                        </li>
+                        <li><span class= "video-resolution video-standard"><span class="video-counts">${selectedCategory.lessThanHdClipCount}</span> &lt;HD</span>
+                        </li>
+                        <li><span class= "video-resolution video-HD"><span class="video-counts">${selectedCategory.hdClipCount}</span> HD</span>
+                        </li>
+                        <li><span class= "video-resolution video-4K"><span class="video-counts">${selectedCategory.fourKClipCount}</span> 4K</span>
+                        </li>
+                        <li><span class= "video-theme video-editorial"><span class="video-counts">${selectedCategory.editorialClipCount}</span> ED</span>
+                        </li>
+                        <li><span class= "video-theme video-commercial"><span class="video-counts">${selectedCategory.commercialClipCount}</span> COM</span>
+                        </li>
+                    </ul>
+                </div>
+                <div id= "category-shot-list" class= "col-sm-12 clearfix modal-body category-shot-list inline-scroll">
+                    <div class= "panel row suggestion-select">
+                        <h5 class= "text-center">SUGGESTIONS</h5>
+                        <ul class= "no-padding">
+                            <li repeat.for= "suggestion of selectedCategory.suggestions">
+                                <p class= "col-lg-9">${suggestion.description}</p>
+                                <button class= "btn btn-secondary pull-right"> <span class= "suggestion-select-item-1 shot-add" click.delegate= "shotSuggestionManager.addShot(suggestion)"><i class="fa fa-camera"></i> ADD</span> </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

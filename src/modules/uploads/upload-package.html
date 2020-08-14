@@ -1,0 +1,45 @@
+<template>
+    <require from="helpers/formatters"></require>
+    <div class="panel clippn-dark-gray-bkg col-lg-8 col-md-8 col-sm-8 col-xs-8 ${loading || loadFailed ? 'flex-centered' : ''}">
+        <div if.bind="loading">
+            <img style="margin: auto;" width="100" src="../images/loading_spinner_green_1.gif" /> </div>
+        <div if.bind="!loading && loadFailed">
+            <span class="validation-error" style="font-size: 16pt;">An error occurred loading the upload package. If the problem persists, please contact Clippn.</span>
+        </div>
+        <div if.bind="!loading && !loadFailed" class="panel-heading col-lg-12 clippn-dark-gray-bkg">
+            <!-- <div class="upload-status col-lg-1 col-md-1 col-sm-1 col-xs-1"> <i class="fa fa-3x fa-${c}"></i> </div> -->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <!-- <a href="#" data-toggle="modal" data-target="#current-upload-modal" click.trigger="setSelected()"> -->
+                <h4 class="panel-title">${data.id} - ${data.package_name}
+                    <span if.bind="data.newishUpload"> 
+                        <span if.bind='data.uploadFinished' style="color:#40a31f">
+                            <i class="fa fa-check"></i>
+                        </span>
+                        <!-- <span if.bind='!data.uploadFinished'style="color: #de2e2a">
+                            <i class="fa fa-times-circle"></i>
+                        </span> -->
+                    </span>
+                </h4>
+                <p if.bind="!isLive" class="clip-description">${data.package_description}</p>
+                <p class="uploaded-by">Uploaded by ${data.uploaded_by || 'a Clippn contributor'} on ${data.created_at | dateFormat:'MMMM Do YYYY'}</p>
+                <div if.bind="isLive" class="progress">
+                        <div class="progress-bar progress-bar-${uploadManager.hasFailures ? 'danger' : 'success'}" role="progressbar" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100" css="width: ${progress}%;">${progress}%</div>
+                    </div>
+                    <p if.bind="isLive" class="clip-description upload-stats">${uploadedBytes | sizeInBytes} / ${totalBytes | sizeInBytes}</p>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">
+                <h5 class="uploading-count">${videoAssetCount}</h5>
+                <p class="uploading-label">Videos</p>
+            </div>
+            <div if.bind="isLive" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 pull-right uploaded-by"> ${uploadedAssets} of ${totalAssets} Uploaded </div>
+        </div>
+    </div>
+    <div class="panel clippn-dark-gray-bkg col-lg-4 col-md-4 col-sm-4 col-xs-4 ${loading || loadFailed ? 'flex-centered' : ''} scrollbox"
+        tabindex="0">
+        <div class="panel-heading col-lg-12 clippn-dark-gray-bkg scrollbox-content">
+            <!-- <div if.bind="!isLive" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pull-right"><i></i></div>    -->
+            <i>${data.feedback ? 'Feedback: ' + data.feedback : 'Awaiting feedback...'}</i>
+        </div>
+    </div>
+</template>

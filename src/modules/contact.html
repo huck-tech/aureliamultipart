@@ -1,0 +1,22 @@
+<template>
+    <div style= "margin-top: 50px;">
+        <form if.bind= "!isSubmitted" class= "register-form" submit.trigger= "submitcomments()" validation-renderer= "register"> <img class= "logo" style= "margin: 20px;" src= "images/clippn-white.png" alt= "Clippn" height= "45" width= "239">
+            <div class= "col-md-4">
+                <div  style="justify-content: center;" class= "register-field">
+                    <label style= "margin: 3px;">How can we help?</label>
+                </div> 
+                <div  style="justify-content: center;" class= "register-field textarea-field">
+                    <textarea rows='6' columns='10' type="text" value.bind='comments & validate'></textarea> 
+                </div>
+            </div>
+            <div style= "margin: 15px; margin-left: 30px; display: flex; flex-direction: column; align-items: center;">
+                <input if.bind= "!isSubmiting" class= "btn btn-primary text-center" style= "width: 150px;" type= "submit" value= "SUBMIT"/>
+                <div if.bind= "isSubmiting" class= "progress progress-striped active" style= "width: 250px;">
+                    <div class= "progress-bar" role= "progressbar" aria-valuenow= "100" aria-valuemin= "0" aria-valuemax= "100" style= "width: 100%"></div>
+                </div> <span if.bind= "hasError" class= "error" style= "margin-top: 10px;">${errorMsg}</span> </div>
+        </form>
+        <div if.bind= "isSubmitted" style= "margin: 100px auto; width: 70%; display: flex; flex-direction: column; align-items: center; text-align: center;">
+            <h3 style="text-transform: none;">Thank you for reaching out to Clippn!</h3>
+            <h4 style="text-transform: none;">We will reach out to you ASAP within one business day.</h4> </div>
+    </div>
+</template>

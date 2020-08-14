@@ -1,0 +1,57 @@
+<template>
+    <require from= "widgets/category-tile"></require>
+    <require from= "widgets/summary-chart"></require>
+    <require from= "widgets/shot-list"></require>
+    <require from= "widgets/star-rating"></require>
+    <require from= "widgets/variety-matrix"></require>
+    <require from= "helpers/formatters"></require>
+    <require from= "widgets/busy-indicator"></require>
+    <main if.bind= "!isLoading" class= "dashboard">
+        <section class= "quantity-quality clippn-black-bkg">
+            <div class= "container">
+                <!--<h3><span class="lato-light">Welcome Back,</span> Joe!</h3>-->
+                <div class= "col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <h4 id="quantity-label">Quantity</h4>
+                    <div id= "quantity" class= "quantity">
+                        <div class= "clips-total col-lg-4 col-md-4 col-sm-6 col-xs-6 clippn-dark-gray-bkg"> <a href= "#/dashboard/clips"><span id="clips-total" >${totalClipsComma || 0}</span><br/><span class="label">Clips</span></a> </div>
+                        <div if.bind="subdomainIsCorporate" style="background-color: #1c1b1b;" class= "clips-sold col-lg-4 col-md-4 col-sm-6 col-xs-6 disabled"> <a>${totalClipsSold || 0}<br/><span class="label disabled">Sold</span></a> </div>
+                        <div if.bind="subdomainIsCorporate" style="background-color: #1c1b1b;" class= "total-sales col-lg-4 col-md-4 col-sm-12 col-xs-12 disabled"> <a>$${totalSales || 0}<br/><span class="label disabled">Total</span></a> </div>
+                        <div if.bind="!subdomainIsCorporate" class= "clips-sold col-lg-4 col-md-4 col-sm-6 col-xs-6 clippn-dark-gray-bkg"> <a href= "#/dashboard/sales">${totalClipsSold || 0}<br/><span class="label">Sold</span></a> </div>
+                        <div if.bind="!subdomainIsCorporate" class= "total-sales col-lg-4 col-md-4 col-sm-12 col-xs-12 clippn-dark-gray-bkg"> <a href= "#/dashboard/sales">$${totalSales || 0}<br/><span class="label">Total</span></a> </div>
+                    </div>
+                </div>
+                <div class= "col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <h4>Quality</h4>
+                    <div id= "quality" class= "quality">
+                        <div class= "star-rating text-center col-lg-4 col-md-4 col-sm-6 col-xs-6 clippn-dark-gray-bkg">
+                            <a href= "#/dashboard/clips">
+                                <star-rating rating.bind= "averageRating"></star-rating>
+                            </a>
+                        </div>
+                        <div if.bind="subdomainIsCorporate" style="background-color: #1c1b1b;" class= "yield col-lg-4 col-md-4 col-sm-6 col-xs-6 disabled"> <a>${yieldPercentage}%<br /><span class="label">Yield</span></a> </div>
+                        <div if.bind="!subdomainIsCorporate" class= "yield col-lg-4 col-md-4 col-sm-6 col-xs-6 clippn-dark-gray-bkg"> <a href= "#/dashboard/uploads">${yieldPercentage}%<br /><span class="label">Yield</span></a> </div>
+                        <div class= "clip-feedback col-lg-4 col-md-4 col-sm-12 col-xs-12 clippn-dark-gray-bkg flex-centered"> <a href= "#/dashboard/uploads" class= "feedback-button btn text-center" role= "button"><i class="fa fa-comment-o"></i>FEEDBACK<span class="feedback-badge" css="display: ${totalRawClipsSummary.unreadFeedbackCount > 0 ? 'block' : 'none'}">${totalRawClipsSummary.unreadFeedbackCount}</span></a> </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class= "variety-matrix clippn-black-bkg">
+            <div class= "container">
+                <div class= "col-lg-6">
+                    <h4>Variety</h4>
+                    <div id= "variety" class= "variety row clippn-black-bkg col-lg-12">
+                        <summary-chart config.bind= "contentTypeChartConfig" data.bind= "totalClipsSummary"></summary-chart>
+                        <summary-chart config.bind= "videoQualityChartConfig" data.bind= "totalClipsSummary"></summary-chart>
+                        <shot-list class= "shot-list" div-id= "shot-list" shot-suggestions.bind= "shotSuggestionsData"></shot-list>
+                    </div>
+                </div>
+                <variety-matrix summary-data.bind= "totalClipsSummary" show-count= "true"></variety-matrix>
+                <div class= "mobile-shot-list">
+                    <shot-list class= "shot-list" div-id= "mobile-shot-list" shot-suggestions.bind= "shotSuggestionsData"></shot-list>
+                </div>
+            </div>
+        </section>
+    </main>
+    <div if.bind= "isLoading" class= "flex-centered flex-column" style= "margin-top: 75px;"> <img style= "margin: auto;" width= "70" src= "../images/loading_spinner_green_1.gif" />
+        <h3>Loading...</h3> </div>
+</template>

@@ -1,0 +1,16 @@
+<template>
+    <!--<require from="./autocomplete.css"></require>-->
+    <div class= "autocomplete-container">
+        <input type= "text" class= "autocomplete-input ${additionalClass}" autocomplete= "off" value.bind= "value & debounce:500" blur.trigger= "hideSuggestions()" keydown.delegate= "keyPressed($event)" placeholder.bind= "placeholder">
+        <div if.bind= "suggestions" class= "autocomplete-suggestions">
+            <div if.bind= "suggestions.length > 0" class= "list-group">
+                <a data-index= "${$index}" class= "list-group-item ${$index === selectedIndex ? 'selected' : ($index === highlightedIndex ? 'active' : '')}" repeat.for= "item of suggestions" mousedown.delegate= "select($index)" style= "cursor: pointer;"> <span if.bind= "!suggestionTemplate">${item}</span>
+                    <compose if.bind= "suggestionTemplate" view.bind= "suggestionTemplate" view-model.bind= "item"></compose>
+                </a>
+            </div>
+            <div class= "no-suggestions" if.bind= "suggestions.length === 0"> <span if.bind= "!noSuggestionsTemplate" class= "no-suggestions-message">${noSuggestionsMessage || 'No results found'}</span>
+                <compose if.bind= "noSuggestionsTemplate" view.bind= "noSuggestionsTemplate"></compose>
+            </div>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,4 @@
+<template>
+    <require from= "./autocomplete"></require>
+    <autocomplete loader.bind= "loader" placeholder= "Start typing user's name..." suggestion-template= "./user-autocomplete-item.html" display-property.bind= "getFullName" additional-class= "user-autocomplete-input" selected-suggestion.two-way= "selectedUser"> </autocomplete>
+</template>

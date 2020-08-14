@@ -1,0 +1,126 @@
+<template>
+    <main class="analytics">
+        <section class="profile">
+            <div class="container">
+                <h3 class="text-center">USER PROFILE</h3>
+                <div class="col-md-12 modal-content clippn-dark-gray-bkg">
+                    <h3 class="text-left"> CONTRIBUTOR AGREEMENT </h3>
+                    <h4 class="text-left">CONTRACT</h4>
+                    <div>
+                        <a href="#/dashboard/user-profile" data-toggle="modal" data-target="#contract-modal">View Contract</a>
+                    </div>
+                </div>
+                <div class="col-md-12 modal-content clippn-dark-gray-bkg">
+                    <h3 class="text-left"> PAYMENT INFO </h3>
+                    <div id="Tiplati-Payment-Info">
+                        <iframe src="${paymentInfoIframeUrl}" css="${paymentInfoIframeLoading ? 'display: none;' : 'width: 100%; height: 500px;'}"></iframe>
+                        <div if.bind="paymentInfoIframeLoading" style="height: 150px; width: 100%; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+                            <img alt="Loading..." style="margin: auto;" width="60" src="../images/loading_spinner_green_1.gif" />
+                            <p style="font-size: 15pt; border: 0;">Loading payment info from Tipalti...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 modal-content clippn-dark-gray-bkg">
+                    <h3 class="text-left"> PERSONAL
+                        <button if.bind="!contactDataInEditMode" class="btn btn-secondary pull-right" click.trigger="enterContactDataEditMode()">
+                            <span class="suggestion-selected shotlist-remove">EDIT</span>
+                        </button>
+                        <button if.bind="contactDataInEditMode" class="btn btn-secondary pull-right" click.trigger="exitContactDataEditMode(true)">
+                            <span class="suggestion-selected shotlist-remove">SAVE</span>
+                        </button>
+                        <button if.bind="contactDataInEditMode" class="btn btn-secondary pull-right" click.trigger="exitContactDataEditMode(false)">
+                            <span class="suggestion-selected shotlist-remove">CANCEL</span>
+                        </button>
+                    </h3>
+                    <h4 class="text-left">NAME & ADDRESS</h4>
+                    <h5>First Name:</h5>
+                    <p if.bind="!contactDataInEditMode">${contactData.firstName}</p>
+                    <input type="text" value.bind="contactData.firstName" if.bind="contactDataInEditMode" />
+                    <h5>Last Name:</h5>
+                    <p if.bind="!contactDataInEditMode">${contactData.lastName}</p>
+                    <input type="text" value.bind="contactData.lastName" if.bind="contactDataInEditMode" />
+                    <h5>Address:</h5>
+                    <p if.bind="!contactDataInEditMode">${contactData.addressLine1}</p>
+                    <input type="text" value.bind="contactData.addressLine1" if.bind="contactDataInEditMode" />
+                    <p if.bind="!contactDataInEditMode">${contactData.addressLine2}</p>
+                    <input type="text" value.bind="contactData.addressLine2" if.bind="contactDataInEditMode" />
+                    <h5>City:</h5>
+                    <p if.bind="!contactDataInEditMode">${contactData.city}</p>
+                    <input type="text" value.bind="contactData.city" if.bind="contactDataInEditMode" />
+                    <h5>State/Province:</h5>
+                    <p if.bind="!contactDataInEditMode">${contactData.stateOrProvince}</p>
+                    <input type="text" value.bind="contactData.stateOrProvince" if.bind="contactDataInEditMode" />
+                    <h5>Country:</h5>
+                    <p if.bind="!contactDataInEditMode">${contactData.country}</p>
+                    <input type="text" value.bind="contactData.country" if.bind="contactDataInEditMode" />
+                    <h5>Zip Code:</h5>
+                    <p if.bind="!contactDataInEditMode">${contactData.zipCode}</p>
+                    <input type="text" value.bind="contactData.zipCode" if.bind="contactDataInEditMode" />
+                    <h4 class="text-left">PHONE & EMAIL</h4>
+                    <h5>Phone Number:</h5>
+                    <p if.bind="!contactDataInEditMode">${contactData.phoneNumber}</p>
+                    <input type="text" value.bind="contactData.phoneNumber" if.bind="contactDataInEditMode" />
+                    <h5>Email:</h5>
+                    <p if.bind="!contactDataInEditMode">${contactData.email}</p>
+                    <input type="text" value.bind="contactData.email" if.bind="contactDataInEditMode" /> </div>
+                <div class="col-md-6 modal-content clippn-dark-gray-bkg">
+                    <h3 class="text-left"> EQUIPMENT
+                        <button if.bind="!additionalDataInEditMode" class="btn btn-secondary pull-right" click.trigger="enterAdditionalDataEditMode()">
+                            <span class="suggestion-selected shotlist-remove">EDIT</span>
+                        </button>
+                        <button if.bind="additionalDataInEditMode" class="btn btn-secondary pull-right" click.trigger="exitAdditionalDataEditMode(true)">
+                            <span class="suggestion-selected shotlist-remove">SAVE</span>
+                        </button>
+                        <button if.bind="additionalDataInEditMode" class="btn btn-secondary pull-right" click.trigger="exitAdditionalDataEditMode(false)">
+                            <span class="suggestion-selected shotlist-remove">CANCEL</span>
+                        </button>
+                    </h3>
+                    <h4 class="text-left">EQUIPMENT</h4>
+                    <h5>4K Camera?</h5>
+                    <p if.bind="!additionalDataInEditMode">${(additionalData.owns4KCamera ? 'Yes' : 'No')}</p>
+                    <div if.bind="additionalDataInEditMode" style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <input type="radio" style="margin-left: 5px; margin-bottom: 8px; margin-right: 5px;" checked.bind="owns4KCamera" />
+                        <label>Yes</label>
+                        <input type="radio" style="margin-left: 15px; margin-bottom: 8px; margin-right: 5px;" checked.bind="doesntOwn4KCamera" />
+                        <label>No</label>
+                    </div>
+                    <h4 class="text-left">SHOOTING PREFERENCE</h4>
+                    <h5>What do you enjoy filming?</h5>
+                    <p if.bind="!additionalDataInEditMode">${additionalData.interestsInfo}</p>
+                    <textarea class="col-md-12 col-sm-12" style="margin-bottom: 10px;" rows="3" value.bind="additionalData.interestsInfo" if.bind="additionalDataInEditMode"></textarea>
+                    <h5>Where do you like to travel?</h5>
+                    <p if.bind="!additionalDataInEditMode">${additionalData.travelInfo}</p>
+                    <textarea class="col-md-12 col-sm-12" style="margin-bottom: 10px;" rows="3" value.bind="additionalData.travelInfo" if.bind="additionalDataInEditMode"></textarea>
+                    <h5>What are some of your favorite hobbies?</h5>
+                    <p if.bind="!additionalDataInEditMode">${additionalData.hobbiesInfo}</p>
+                    <textarea class="col-md-12 col-sm-12" style="margin-bottom: 10px;" rows="3" value.bind="additionalData.hobbiesInfo" if.bind="additionalDataInEditMode"></textarea>
+                </div>
+            </div>
+        </section>
+    </main>
+    <div class="modal" id="contract-modal">
+        <div class="modal-dialog">
+            <div class="modal-content clippn-dark-gray-bkg">
+                <div class="modal-header">
+                    <h3>YOUR CLIPPN CONTRACT</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12 no-padding">
+                        <div class="form-group col-md-12 clippn-subtle-gray flex-centered" style="min-height: 200px;">
+                            <div if.bind="loadingContract" class="flex-centered flex-column">
+                                <img style="margin: auto;" width="70" src="../images/loading_spinner_green_1.gif" />
+                                <span>Loading...</span>
+                            </div>
+                            <p if.bind="!loadingContract" class="${contractLoadFailed ? 'validation-error' : ''}" innerhtml.bind="contractText"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer row">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-primary text-center" click.trigger="closeContractModal()">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

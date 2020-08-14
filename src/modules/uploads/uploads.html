@@ -1,0 +1,62 @@
+<template>
+    <require from="./upload-package"></require>
+    <require from="./upload-package-details"></require>
+    <require from="helpers/date-picker-attribute"></require>
+    <require from="widgets/pager"></require>
+    <main class="uploads-page">
+        <section id="content" class="container clippn-black-bkg">
+            <div class="row">
+                <h3 class="col-md-3" id="uploads-total" style="display: inline">${isLoading ? 'Loading...' : resultsWithComma + ' Upload(s)'}</h3>
+                <h4 class="col-md-3"style="color:#40a31f; text-align: left; display: inline; bottom: -20px">
+                    <i class="fa fa-check"></i> = successful upload</h4>
+                <!-- <h4 class="col-md-3" style="color:#de2e2a; text-align: left; display: inline; bottom: -20px">
+                    <i class="fa fa-times-circle"></i> = failed upload</h4> -->
+            </div>
+
+            <div id="upload-filters" class="row">
+                <div class="text-inputs">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="usr">Search:</label>
+                            <input id="clipsSearchText" type="text" class="form-control" placeholder="Enter search term..." value.bind="searchText" keypress.trigger="handleKeyPress($event)"> </div>
+                    </div>
+                    <div class="col-md-2 col-sm-3 col-xs-3">
+                        <div class="form-group">
+                            <label for="usr">From:</label>
+                            <input id="clipsSearchFromDate" type="text" class="form-control" placeholder="Anytime" date-picker value.bind="fromDate & validate" keypress.trigger="handleKeyPress($event)"> </div>
+                    </div>
+                    <div class="col-md-2 col-sm-3 col-xs-3">
+                        <div class="form-group">
+                            <label for="usr">To:</label>
+                            <input id="clipsSearchToDate" type="text" class="form-control" placeholder="Anytime" date-picker value.bind="toDate & validate" keypress.trigger="handleKeyPress($event)"> </div>
+                    </div>
+                    <!-- <div class="col-md-2 col-sm-3 col-xs-3"> -->
+                        <!-- <div class="form-group sorting">
+                            <input type="checkbox" checked.bind="includeFailed" />
+                            <label for="usr">Include Failed</label>
+                        </div> -->
+                    <!-- </div> -->
+                    <div class="col-md-2 col-sm-1 col-xs-1">
+                        <button class="clips-filter-button search-button" click.trigger="search(0)">GO</button>
+                        <button class="clips-filter-button search-button" click.trigger="clear()">CLEAR</button>
+                    </div>
+                </div>
+            </div>
+            <div if.bind="validationError" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 validation-error clips-validation-error">${validationError.message}</div>
+            <div class="row"><upload-package repeat.for="package of packages | sort:'id':false" data.bind="package"></upload-package></div>
+            <div if.bind="isLoading" class="flex-centered flex-column" style="margin-top: 75px;">
+                <img style="margin: auto;" width="70" src="../images/loading_spinner_green_1.gif" />
+                <h3>Loading...</h3>
+            </div>
+            <div if.bind="noResults || hasError" class="flex-centered flex-column" style="margin-top: 90px; margin-bottom: 83px;">
+                <p if.bind="noResults" style="font-style: italic; font-size: 18pt;">No upload ingests found</p>
+                <p if.bind="hasError" class="validation-error" style="font-style: italic; font-size: 16pt;">An unexpected error occurred. Please try again.</p>
+            </div>
+            <div if.bind="!isLoading">
+                <pager page-number.two-way="pageNumber" page-size.two-way="pageSize" num-results.bind="numResults" requires-update.bind="updatePages"></pager>
+            </div> 
+        </section>
+
+    </main>
+    <upload-package-details package-id.bind="selectedPackageId"></upload-package-details>
+</template>

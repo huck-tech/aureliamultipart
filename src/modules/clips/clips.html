@@ -1,0 +1,108 @@
+<template>
+    <require from="./clip-details"></require>
+    <require from="helpers/formatters"></require>
+    <require from="widgets/star-rating"></require>
+    <require from="helpers/date-picker-attribute"></require>
+    <require from="widgets/pager"></require>
+    <main class="clips-page">
+        <section id="content" class="container clippn-black-bkg">
+
+            <div id="clip-filters" class="row">
+                <form class="clips-search-form">
+                    <h3 class="col-md-1" id="clips-total">${isLoading ? 'Loading...' : resultsWithComma + ' Clips'}</h3>
+                    <div class="text-inputs">
+                        <div class="col-md-3 clips-search-text">
+                            <div class="form-group">
+                                <label for="usr">Search:</label>
+                                <input id="clipsSearchText" type="text" class="form-control" placeholder="Enter search term..." value.bind="searchText" keypress.trigger="handleKeyPress($event)"> </div>
+                        </div>
+                        <div class="col-md-2 col-sm-6 col-xs-6 clips-search-date">
+                            <div class="form-group">
+                                <label for="usr">From:</label>
+                                <input id="clipsSearchFromDate" readonly="readonly" type="text" class="form-control" placeholder="Anytime" date-picker value.bind="fromDate & validate"
+                                    keypress.trigger="handleKeyPress($event)"> </div>
+                        </div>
+                        <div class="col-md-2 col-sm-6 col-xs-6 clips-search-date">
+                            <div class="form-group">
+                                <label for="usr">To:</label>
+                                <input id="clipsSearchToDate" readonly="readonly" type="text" class="form-control" placeholder="Anytime" date-picker value.bind="toDate & validate"
+                                    keypress.trigger="handleKeyPress($event)"> </div>
+                        </div>
+                        <div class="col-md-3">
+                            Single button
+                            <div class="btn-group btn-group-justified clips-filter-button" keypress.trigger="handleKeyPress($event)">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    ${selectedCategory != null && selectedCategory != 'Categories' ? selectedCategory.name : 'Categories'}
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li repeat.for="category of categories">
+                                        <a href="#/dashboard/clips" click.trigger="setSelectedCategory(category)">${category.name}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- <div if.bind="subdomainIsCorporate" class="col-md-2">
+                            Single button
+                            <div class="btn-group btn-group-justified clips-filter-button" keypress.trigger="handleKeyPress($event)">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                ${selectedDistributor != null && selectedDistributor != '[ALL]' ? selectedDistributor.distributor_name
+                                    : 'Distributors'}
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li repeat.for="distributor of distributors">
+                                        <a href="#/dashboard/clips" click.trigger="setSelectedDistributor(distributor)">${distributor.distributor_name}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div> -->
+                        <div class="col-md-2 col-sm-6 col-xs-6">
+                            <button class="clips-filter-button search-button" type="button" click.delegate="search(0)">GO</button>
+                            <button class="clips-filter-button search-button" type="button" click.delegate="clear()">CLEAR</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div if.bind="validationError" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 validation-error clips-validation-error">${validationError.message}</div>
+            <div id="clip-list" class="row">
+                <div mouseenter.trigger="hoverVideo($index)" mouseleave.trigger="hideVideo($index)" class="clip-preview col-md-3 col-sm-6 clippn-dark-gray-bkg"
+                    data-toggle="modal" data-target="#clipDetailsModal" click.trigger="setSelected(clip)" repeat.for="clip of clips | sort:'datetime':false">
+                    <div class="video-poster">
+                        <span class="video-resolution video-${clip.resolutionClass}">${clip.resolutionDisplay}</span>
+                        <!-- <img src.bind="clip.thumbnailUrl"  alt=""> </div> -->
+                        <div id="thumb-${$index}" class="video-clip" css="background-image:url(${clip.thumbnailUrl}); background-size: contain; background-repeat: no-repeat;">
+                            <video id="video-${$index}" class="video" preload="none" loop>
+                                <source src="${clip.proxyUrl}" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="clip-top-title">
+                                <h5 class="clip-title">${clip.userFields['user.5']}</h5>
+                            </div>
+                            <h5 class="clip-title">${clip.name}${clip.duration}</h5>
+                            <h5 class="attribution">${clip.userFields['user.34']} - ${clip.userFields['user.4']}</h5>
+                            <!-- <h5 class= "col-sm-4 clip-duration">${clip.itemcode}</h5> -->
+                            <h5 class="col-sm-6 star-rating pull-left">
+                                <star-rating rating.bind="clip.rating"></star-rating>
+                            </h5>
+                            <h5 class="col-sm-6 time-stamp pull-right">${clip.datetime}</h5>
+                        </div>
+                    </div>
+                    <div if.bind="isLoading" class="flex-centered flex-column" style="margin-top: 75px;">
+                        <img style="margin: auto;" width="70" src="../images/loading_spinner_green_1.gif" />
+                        <h3>Loading...</h3>
+                    </div>
+                    <div if.bind="noResults || hasError" class="flex-centered flex-column" style="margin-top: 75px;">
+                        <p if.bind="noResults" style="font-style: italic; font-size: 18pt;">No clips found</p>
+                        <p if.bind="hasError" class="validation-error" style="font-style: italic; font-size: 16pt;">An unexpected error occurred. Please try again.</p>
+                    </div>
+                </div>
+            </div>
+        <div if.bind="!isLoading">
+            <pager page-size.two-way="pageSize" page-number.two-way="pageNumber" num-results.bind="numResults" requires-update.bind="updatePages"></pager>
+        </div>
+        </section>
+    </main>
+    <clip-details data.bind="selectedClip"></clip-details>
+</template>

@@ -1,0 +1,199 @@
+<template>
+    <require from="helpers/formatters"></require>
+    <!--<require from"widgets/file-drop-zone"></require>-->
+    <require from="helpers/date-picker-attribute"></require>
+    <require from="helpers/filter-on-property-value-converter"></require>
+    <require from="widgets/user-autocomplete"></require>
+    <form class="modal multi-step" id="myUpload" submit.trigger="upload()" validation-renderer="label-adjacent" reset-on-close="true"
+        data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content clippn-dark-gray-bkg">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" click.trigger="clear()">&times;</button>
+                    <h3>
+                        <i class="fa fa-cloud-upload"></i> UPLOAD CLIPS:
+                        <span class="modal-step" style="color:#40a31f; font-weight: bold;"> STEP
+                            <span style="color:#40a31f; font-weight: bold;" id="m-progress-current" class="m-progress-current"> </span>/
+                            <span style="color:#40a31f; font-weight: bold;" class="m-progress-total"></span>
+                        </span>
+                    </h3>
+                    <h4 class="modal-title step-1" data-step="1">ADD FOOTAGE OF A SIMILAR STORY OR EVENT</h4>
+                    <h4 class="modal-title step-2" data-step="2">ADD RELEASES</h4>
+                    <h4 class="modal-title step-3" data-step="3">DESCRIBE YOUR FOOTAGE AND BEGIN UPLOAD</h4>
+                    <!-- <div class= "m-progress">
+                        <div class= "m-progress-bar-wrapper">
+                            <div class= "m-progress-bar"> </div>
+                        </div>
+                    </div> -->
+                </div>
+                <!--STEP 1-->
+                <div class="modal-body step-1" data-step="1">
+                    <div class="col-lg-12">
+                        <div class="well clippn-light-gray-bkg" if.bind="isInitialUpload">
+                            <span class="note">NOTE:</span> You will be able to do MULTIPLE UPLOADS, but please upload SIMILAR SHOTS TOGETHER!
+                        </div>
+                        <h5 style="color:#40a31f;">What are you uploading?</h5>
+                        <div class="row">
+                            <div css="${!expectCameraFolder ? 'visibility: hidden' : 'visibility: visible'}" class="file-picker pull-right">
+                                <label for="uploadClipSelector" class="file-select text-right">
+                                    <i class="icon-searchfolder"></i>
+                                </label>
+                                <input id="uploadClipSelector" type="file" directory.bind="showFolderBrowse" webkitdirectory.bind="showFolderBrowse" class="hidden-file-input"
+                                    change.trigger="addClipsFromFileSelector()" multiple/>
+                            </div>
+                            <div class="btn-group col-md-9 upload-input-radios">
+                                <label for="singleClipsRadio" css='color: rgb(80, 80, 80);'>
+                                    <input type="radio" id="singleClipsRadio" checked.bind="expectSingleClips" /> Clips </label>
+                                <!-- <label for="folderRadio" css="${!supportsFolderBrowse ? 'color: rgb(80, 80, 80);' : ''}">
+                                    <input type="radio" id="folderRadio" checked.bind="expectCameraFolder" disabled.bind="!supportsFolderBrowse" /> Camera Folder </label>
+                                <br/>
+                                <span if.bind="!supportsFolderBrowse" style="font-style: italic; margin-left: 15px; color: rgb(213, 113, 0);">NOTE: Please use Chrome, Edge, or Firefox for camera folder upload support</span> -->
+                            </div>
+                        </div>
+                        <div id="clip-drop-zone" class="panel">
+                            <div class="drop-zone ${!clipDropZone.isDropActive ? '' : 'drop-active'}">
+                                <h6 if.bind="expectCameraFolder === 'off'" class="text-center" style="text-transform: uppercase;">Drag or Select Clips here</h6>
+                                <h6 if.bind="expectCameraFolder === 'on'" class="text-center" style="text-transform: uppercase;">Drag or Select a Camera Folder (R3D, P2, FS7, etc…)</h6>
+                            </div>
+                            <ul class="no-padding">
+                                <div if.bind="expectCameraFolder === 'off' && cameraFolders.length === 0">
+                                    <li repeat.for="fileUploader of packageUploader.assetUploaders | filterOnProperty:'isRelease':false ">
+                                        <span> ${fileUploader.displayName}
+                                            <button class="btn btn-danger pull-right file-remove" click.trigger="removeFile(fileUploader)">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                            <span class="file-size pull-right">${fileUploader.size | sizeInBytes}</span>
+                                        </span>
+                                    </li>
+                                </div>
+                                <div if.bind="expectCameraFolder === 'on' && clips.length === 0">
+                                    <li repeat.for="folder of cameraFolders">
+                                        <span><i style="color:#40a31f;" class="fa fa-folder fa-2x file-folder"></i> 
+                                            <span>${folder.name}</span>
+                                            <button class="btn btn-danger pull-right file-remove" click.trigger="removeFolder(folder)">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                            <span class="file-size pull-right">${folder.size | sizeInBytes}</span>
+                                        </span>
+                                    </li>
+                                </div>
+                            </ul>
+                        </div>
+                        <div if.bind="user.isAdmin || user.isRep" class="col-lg-12 col-md-12 flex-centered flex-column">
+                            <div style="display: flex;">
+                                <input id="proxyUploadCheckbox" type="checkbox" style="margin-left: 0;" checked.bind="isProxyUpload">
+                                <label for="proxyUploadCheckbox" style="margin-right: 5px;">I'm uploading for someone else</label>
+                            </div>
+                            <user-autocomplete if.bind="isProxyUpload" selected-user.two-way="owner"></user-autocomplete>
+                        </div>
+                        <div if.bind="clipsErrorMessage !== null" class="text-center">
+                            <span class="validation-error">${clipsErrorMessage}</span>
+                        </div>
+                    </div>
+                </div>
+                <!--STEP 2-->
+                <div class="modal-body step-2" data-step="2">
+                    <div class="col-lg-12">
+                        <div class="file-picker pull-right">
+                            <label for="uploadReleaseSelector" class="file-select text-right">
+                                <i class="icon-searchfolder"></i>
+                            </label>
+                            <input id="uploadReleaseSelector" type="file" class="hidden-file-input" change.trigger="addReleasesFromFileSelector()" multiple
+                                accept="application/pdf" /> </div>
+                        <h5>Do you have any property or talent releases for this footage? Add them here.</h5>
+                        <span style="font-style: italic; margin-left: 5px; color: rgb(213, 113, 0);">NOTE: Releases must be in PDF format.</span>
+                        <div id="release-drop-zone" class="panel" style="margin-top: 10px;">
+                            <!--<file-drop-zone drop-handler.bind"releaseDropHandler" drop-hint"DRAG RELEASES HERE" drop-zone-div-id"release-drop-zone"></file-drop-zone>-->
+                            <div class="drop-zone ${!releaseDropZone.isDropActive ? '' : 'drop-active'}">
+                                <h6 class="text-center">DRAG RELEASES HERE</h6>
+                            </div>
+                            <ul class="no-padding">
+                                <li repeat.for="releaseUploader of packageUploader.assetUploaders | filterOnProperty:'isRelease':true">
+                                    <span> ${releaseUploader.displayName}
+                                        <button class="btn btn-danger pull-right file-remove" click.trigger="removeFile(releaseUploader)">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                        <span class="file-size pull-right">${releaseUploader.size | sizeInBytes}</span>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div if.bind="releasesErrorMessage !== null" class="text-center">
+                            <span class="validation-warning">${releasesErrorMessage}</span>
+                        </div>
+                    </div>
+                </div>
+                <!--STEP 3-->
+                <div class="modal-body step-3" data-step="3">
+                    <div class="form-group col-md-6">
+                        <label for="packageName">Package Name:</label>
+                        <input id="packageName" type="text" class="form-control" placeholder="Name of this story or event" value.bind="name & validate"
+                            disabled.bind="isUploading"> </div>
+                    <div class="form-group col-md-6">
+                        <label for="packageDescription">Description:</label>
+                        <textarea id="packageDescription" class="form-control" rows="3" placeholder="Enter clip description" value.bind="description & validate"
+                            disabled.bind="isUploading"></textarea>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="city">City:</label>
+                        <input id="city" type="text" class="form-control" placeholder="City" value.bind="city & validate" disabled.bind="isUploading"> </div>
+                    <div class="form-group col-md-6">
+                        <label for="state">State/Province:</label>
+                        <input id="state" type="text" class="form-control" placeholder="State" value.bind="stateOrProvince & validate" disabled.bind="isUploading"> </div>
+                    <div class="form-group col-md-6">
+                        <label for="country">Country:</label>
+                        <select id="country" class="form-control" placeholder="Country" value.bind="country & validate" disabled.bind="isUploading">
+                            <option>Select your country</option>
+                            <option repeat.for="c of sortedCountries" model.bind="c">${c.name}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="dateShot">Date Shot:</label>
+                        <input id="dateShot" type="text" class="form-control" placeholder="Date" date-picker value.bind="dateShot & validate" disabled.bind="isUploading">
+                    </div>
+                    <div id="file-notes" class="form-group col-lg-12">
+                        <label for="notes">
+                            <h5>Anything else you want to tell Clippn about this upload?</h5>
+                        </label>
+                        <textarea id="notes" class="form-control" rows="3" placeholder="Add Notes" value.bind="notes & validate" disabled.bind="isUploading"></textarea>
+                    </div>
+                    <div if.bind="showUploadErrorMessage" class="text-center">
+                        <span class="validation-error">An error occurred uploading your package. If the problem persists, please contact Clippn.</span>
+                    </div>
+                </div>
+                <div class="modal-footer row">
+                    <div class="col-md-12">
+                        <button type="button" id="upload-button-step-1" class="btn btn-primary text-center step step-1" data-step="1" click.trigger="multiStepModal.goToStep(2)">Continue</button>
+                        <button type="button" class="btn btn-secondary text-center step step-2" data-step="2" click.trigger="multiStepModal.goToStep(1)">Back</button>
+                        <button type="button" id="upload-button-step-2" class="btn btn-primary text-center step step-2" data-step="2" click.trigger="multiStepModal.goToStep(3)">Continue</button>
+                        <button type="button" class="btn btn-secondary text-center step step-3" data-step="3" click.trigger="multiStepModal.goToStep(2)"
+                            if.bind="!isUploading">Back</button>
+                        <button type="button" id="upload-button-step-3" class="btn btn-primary text-center step step-3" data-step="3" click.trigger="upload()"
+                            if.bind="!isUploading">
+                            <i class="fa fa-cloud-upload"></i> BEGIN UPLOAD!</button>
+                        <img if.bind="isUploading" alt="Uploading..." src="../images/loading_spinner_green_1.gif" width="40" /> </div>
+                </div>
+            </div>
+        </div>
+        <div id="uploadConfirmation" class="modal fade" style="z-index: 10000;">
+            <div class="modal-dialog" style="margin-top: 12%;">
+                <div class="modal-content clippn-dark-gray-bkg text-center">
+                    <div class="modal-header">
+                        <h3 id="modal-congrats" class="modal-title" style="padding-bottom: 0;">Congrats! Your clips are uploading</h3>
+                    </div>
+                    <div class="modal-body">
+                        <br/>
+                        <p class="validation-warning" style="font-size: 14pt; font-style: italic; margin-left: 50px; margin-right: 50px;">Please note that refreshing this page or navigating away from your Clippn Dashboard while uploads
+                            are still in progress will cause your uploads to be canceled.</p>
+                        <br/>
+                        <!-- <p style="font-size: 18pt;">What would you like to do next?</p> -->
+                    </div>
+                    <div class="modal-footer" style="padding-top: 0;">
+                        <!-- <button class="btn btn-primary" click.trigger="uploadMore()">Upload More!</button> -->
+                        <button id="upload-modal-close" class="btn btn-primary" click.trigger="close()">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</template>

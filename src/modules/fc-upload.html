@@ -1,0 +1,36 @@
+<template>
+    <require from='helpers/script-injector'></require>
+    <h2>UPLOAD</h2>
+    <div id="mainContainer" class="container">
+        <!-- Row containing the output of the FileCatalyst application, as required by bootstrap grid -->
+        <div class="row">
+            <!--Minimum upload UI identified by div id="localFiles"-->
+            <div id="localFiles" class="col-lg-6"></div>
+            <!-- <div class="col-lg-6">
+                <!--optional placement of the local file list controls identified by div id="localFiles-controls"-->
+                <div id="localFiles-controls"></div>
+                <!--optional placement of the upload queue identified by div id="localFiles-queue"-->
+                <div id="localFiles-queue"></div>
+                <!--optional placement of the status of ongoing transfers (progress bar) identified by div id="localFiles-info".
+                The specific fields seen are configurable in configuration.js, but typically include such information as the current
+                filename, the average rate, and a transfer progress bar.
+                In the sample pages, this area uses the "hide" class and becomes visible only when transfer is initiated.-->
+                <div id="localFiles-info" class="hide"></div>
+                <!--optional placement of the email notification pane identified by div id="localFiles-email"
+                Prerequisites:
+                - Outgoing email server (SMTP) settings must be set on the FileCatalyst Direct Server
+                - in /js/configuration.js, email must be enabled. In this example the email pane is hidden by default-->
+                <div id="localFiles-email"></div>
+            </div>
+        </div>
+    </div>
+    <!-- <scriptinjector url="js/vendor/jquery-1.10.2.min.js"></scriptinjector> -->
+    <!-- <scriptinjector  url="js/vendor/bootstrap.min.js"></scriptinjector> -->
+    <scriptinjector url="src/helpers/js/vendor/tooltip.js"></scriptinjector>
+    <scriptinjector url="src/helpers/js/vendor/i18next.min.js"></scriptinjector>
+    <scriptinjector url="src/helpers/js/plugins.js"></scriptinjector>
+    <scriptinjector url="src/helpers/js/localization.js"></scriptinjector>
+    <!-- <scriptinjector  url="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></scriptinjector> -->
+    <scriptinjector url="src/helpers/js/configuration.js"></scriptinjector>
+    <scriptinjector url="src/helpers/js/main.js"></scriptinjector>
+</template>

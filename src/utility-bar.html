@@ -1,0 +1,110 @@
+<template>
+	<require from="widgets/user-autocomplete">
+	</require>
+	<require from="helpers/formatters">
+	</require>
+	<section id="utility" class="clippn-black-bkg">
+		<div id="utility-container" class="container-fluid">
+			<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+				<ul if.bind="user.isRep || user.isAdmin" class="utility-ul">
+					<li class="now-viewing">NOW VIEWING:
+						<div id="nowViewingDropdown" class="btn-group btn-small">
+							<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								${selectedUser != null ? (selectedUser.firstName != null ? selectedUser.firstName + ' ' + selectedUser.lastName : selectedUser.first_name
+								+ ' ' + selectedUser.last_name) : 'All Contributors'}
+								<span class="caret">
+								</span>
+							</button>
+							<ul class="dropdown-menu">
+								<li click.trigger="clearSelectedUser()">
+									<a class="dropdown-item">All Contributors</a>
+								</li>
+								<li click.trigger="setSelectedUser(user.data)">
+									<a class="dropdown-item">Just Me</a>
+								</li>
+								<li class="dropdown-separator">---------------------
+								</li>
+								<li if.bind="user.isRep || user.isAdmin" class="flex-centered" style="margin-top: 10px; margin-bottom: 10px;">
+									<user-autocomplete selected-user.two-way="selectedUser">
+									</user-autocomplete>
+									<!-- <input type="text" class="user-search" keyup.trigger="handleKeyUp($event)" value.bind="searchText" placeholder="Search users"/> -->
+								</li>
+								<li repeat.for="u of users" click.trigger="setSelectedUser(u)">
+									<a class="dropdown-item">${u.first_name + ' ' + u.last_name}</a>
+								</li>
+							</ul>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="col-lg-4 col-md-4 hidden-sm hidden-xs ${uploadManager.hasFailures ? 'upload-alert' : ''}" if.bind="uploadManager.isUploading || uploadManager.hasFailures || uploadManager.isUploaded">
+				<div class="label">
+					<!-- <div if.bind="uploadManager.isUploaded && !uploadManager.isUploading && !uploadManager.hasFailures">
+						<div class="col-lg-12 col-md-12">
+							<div class="col-lg-5 col-md-5" style="right: 13%; color: #fff; font-size: 10pt; margin-bottom: -10%">
+								Upload ID: ${uploadManager.packageId}
+							</div>
+						</div>
+					</div> -->
+					<i if.bind="uploadManager.hasFailures" class="fa fa-exclamation-triangle"></i>
+					<span class="package-uploading" if.bind="uploadManager.isUploading" class="lato-light">UPLOADING:</span>
+					<span if.bind="uploadManager.isUploading" style="font-size: 10pt;"> ${uploadManager.uploadsInProgress} File(s)</span>
+					<span if.bind="uploadManager.hasFailures && !uploadManager.isUploading" class="label lato-light" style="font-weight: bold; font-size: 10pt; color: #d9534f;">UPLOADS FAILED</span>
+					<a if.bind="uploadManager.hasFailures && !uploadManager.initiatingRetry" style="float: right; cursor: pointer;" click.trigger="uploadManager.clearErrors()">[X] Clear</a>
+					<a if.bind="uploadManager.hasFailures && !uploadManager.initiatingRetry" style="float: right; cursor: pointer; margin-right: 20px;"
+					 click.trigger="uploadManager.retryFailedUploads()">
+						<i class="fa fa-refresh"></i> Retry</a>
+					<span if.bind="uploadManager.isUploading && !uploadManager.hasFailures && uploadManager.avgTransferRate" class="pull-right"
+					 style="font-size: 10pt;">${uploadManager.avgTransferRate | sizeInBytes}/sec</span>
+					<span if.bind="uploadManager.initiatingRetry" class="pull-right" style="font-size: 10pt;">Retrying...</span>
+				</div>
+				<div if.bind="!uploadManager.isUploaded" class="progress" style="margin-top: 3px; margin-bottom: 8px;">
+					<div class="progress-bar progress-bar-${uploadManager.hasFailures ? 'danger' : 'success'}" role="progressbar" aria-valuenow="${uploadManager.percentComplete}"
+					 aria-valuemin="0" aria-valuemax="100" css="width: ${uploadManager.percentComplete}%">
+						<span class="sr-only" style="font-size: 10pt;">${uploadManager.percentComplete}% Complete (success)</span>
+					</div>
+				</div>
+				<!-- <div if.bind="uploadManager.isUploaded && !uploadManager.isUploading && !uploadManager.hasFailures"> -->
+				<!-- <div class="progress-complete col-lg-12 col-md-12" style="margin-top: 3px; margin-bottom: 8px;">
+						<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100"
+						 css="width: 100%">
+						</div>
+					</div> -->
+
+				<!-- </div> -->
+			</div>
+			<div if.bind="uploadManager.hasFailures" class="label pull-right" style="font-size: 10pt;">
+				<span>${uploadManager.uploadsFailed} FAILED</span>
+				<!-- <div id="failedUploads" class="modal fade" style="z-index: 10000;">
+					<div class="modal-dialog" style="margin-top: 12%;">
+						<div class="modal-content clippn-dark-gray-bkg text-center">
+							<div class="modal-header">
+								<h3 id="modal-congrats" class="modal-title" style="padding-bottom: 0;">The following files failed to upload:</h3>
+							</div>
+							<div class="modal-body">
+								The following uploads reported errors:
+								<ul id="double"> <span class="code-comment"></span>
+								<li repeat.for="upload of uploadManager.failedUploads">
+									${upload}
+								</li>
+								</ul>
+							</div>
+							<div class="modal-footer" style="padding-top: 0;">
+								<button id="failure-modal-close" class="btn btn-primary" click.trigger="close()">Close</button>
+							</div>
+						</div>
+					</div>
+				</div> -->
+			</div>
+			<div if.bind="uploadManager.isUploading && uploadManager.avgTransferRate" class="label pull-right" style="font-size: 10pt;">
+				<span>${uploadManager.timeRemainingInSecs | timeInSeconds} remaining</span>
+			</div>
+			<div repeat.for="upload of uploadManager.uploaded" class="col-lg-12 col-md-12">
+				<div style="float: right; color: #fff;">
+					<i class="fa fa-check-square upload-complete"></i>
+					Upload ${upload} Complete
+				</div>
+			</div>
+		</div>
+	</section>
+</template>

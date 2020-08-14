@@ -1,0 +1,37 @@
+<template>
+    <div class="paging row">
+        <div if.bind="numPages > 0" class="page-numbers">
+            <div class="page-number-list">
+                <label>Pages:</label>
+                <span if.bind="showFirstPageLink">
+                    <a click.trigger="pageNumber = 0">1</a>
+                </span>
+                <span if.bind="showFirstPageLink">...</span>
+                <span repeat.for="pageNum of pageNumbers">
+                    <a if.bind="pageNum !== pageNumber" click.trigger="pageNumber = pageNum">${pageNum + 1}</a>
+                    <span style="margin-left: 0;" if.bind="pageNum === pageNumber">${pageNum + 1}</span>
+                </span>
+                <span if.bind="showLastPageLink">...</span>
+                <span if.bind="showLastPageLink">
+                    <a click.trigger="pageNumber = numPages - 1">${numPages}</a>
+                </span>
+            </div>
+            <div class="page-number-jump">
+                <form submit.delegate="pageNumber = userInputPageNum - 1">
+                    <label>Jump to:</label>
+                    <input type="text" value.bind="userInputPageNum" />
+                    <button>GO</button>
+                </form>
+            </div>
+        </div>
+        <div style="flex: 1;"></div>
+        <div if.bind="numPages > 0" class="page-size">
+            <select class="page-size-dropdown" value.bind="pageSize">
+                <option value.bind="20">20</option>
+                <option value.bind="50">50</option>
+                <option value.bind="100">100</option>
+            </select>
+            <label>results per page</label>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,264 @@
+<html>
+    <head>
+        <title>FileCatalyst TransferAgent Windows Installation Guide</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <link rel="shortcut icon" href="images/favicon.ico"/>
+        <link href="style.css" rel="stylesheet" type="text/css" />
+        <script src="jquery.js"></script>
+    </head>
+
+    <body>
+        <div id="wrapper">
+            <div id="logo"><a id="top"></a>
+                <img src="images/header.jpg" alt="FileCatalyst Header Logo"/>
+                <h1>File<em>Catalyst</em> TransferAgent<br/>Windows Installation Guide</h1>
+            </div>
+
+            <div id="tableOfContents">
+                <h2>Table of Contents</h2>
+                <ol id="TOC">
+                    <li></li>
+                </ol>
+            </div>
+
+
+            <hr/> <!--not necessary once proper styles are built-->
+
+            <div id="mainContent">
+
+                <div class="section">
+                    <h2 id="req">System Requirements</h2>
+                    <p>
+                        On the end user side, FileCatalyst TransferAgent was designed to run on a multitude of
+                        operating systems and hardware configurations. Below are the minimum requirements:
+                    </p>
+                    <ul>
+                      <li>Dual Core processor, 2GB RAM, 80MB of free disk space</li>
+                      <li>Windows 7 or higher, MacOS 10.7 (Lion) or higher</li>
+                      <li>Recent web browser: IE 10+, Safari (MacOS only), Chrome, Firefox</li>
+                      <li>Java 8 (Java 1.8) or newer</li>
+                      <li>Broadband Internet connection</li>
+                      <li>Network connectivity to FileCatalyst Direct Server (third party FTP servers are not supported)</li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <h2 id="download">Download the Installer</h2>
+                    <p>The organization hosting the FileCatalyst-enabled file transfer page
+                        will provide a link to a version of FileCatalyst TransferAgent, typically
+                        but not always from the same dialog used to access this guide.</p>
+                    <p>Once the browser has completed downloading the installer, it will usually
+                        ask if you would like to run it. If not, you must go to your download
+                        location and execute the file "installer_fc_transferagent.exe".
+                    </p>
+                </div>
+
+                <div class="section">
+                    <h2 id="html_document">Installer Wizard</h2>
+                 
+                    <div class="subsection">
+                        <h3 id="Introduction">Introduction</h3>
+                        <p>You will be shown the first screen of the installer. This will introduce you to the installer for the TransferAgent, as well as the different ways to install
+                        the TransferAgent. The available ways of installation are as follows:
+                        </p>
+                        <ul>
+                        	<li><strong>Basic installation: </strong> This installation mode is for individuals that don't require custom configurations for their installations. By selecting
+                        	this mode, TransferAgent will install with the default configurations that satisfy most use cases.</li>
+                        	<li><strong>Custom installation: </strong> This installation mode is for individuals that may require special configurations for their installations. By selecting 
+                        	this mode, TransferAgent will present an optional panel that allows for custom configurations to be supplied.</li>
+                        </ul>
+                        <p><img src="images/installer_docs/installerIntro.png" title="Install Wizard Step 1 - Introduction"/></p>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 id="information">Information</h3>
+                        <p>This will gives some information about our products. If you are ready to install, click on the next button.</p>
+                        <p><img src="images/installer_docs/installer1.png" title="Install Wizard Step 1 - Information"/></p>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 id="license">License</h3>
+                        <p>In order to proceed you must accept the terms of the license.</p>
+                        <p><img src="images/installer_docs/installer2.png" title="Install Wizard Step 2 - License"/></p>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 id="location">Location</h3>
+                        <p>After agreeing to our license and clicking next, you will be given the opportunity to set the install location. </p>
+                        <p><img src="images/installer_docs/installer3.png" title="Install Wizard Step 3 - Location"/></p>
+                        <p>If this location does not exist, you will be asked for permission to create it, otherwise you
+                            will be warned that some of your existing files may be overwritten. </p>
+                        <p><img src="images/installer_docs/installer4.png" title="Install Wizard Step 3b - Create Location"/></p>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 id="hdd_install">Install Files to Hard Drive</h3>
+                        <p>Continuing will install the files on your hard drive. </p>
+                        <p><img src="images/installer_docs/installer5.png" title="Install Wizard Step 4 - Install files to Hard Drive"/></p>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 id="advancedConfiguration">Advanced Configurations</h3>
+                        <p><img src="images/installer_docs/installerAdvancedConf.png" title="Install Wizard - Advanced Configurations"/></p>
+                        <p>If the <strong>Custom Installation mode</strong> was specified during the installation process, an area for specifying
+                        configurations will be presented. In this area, you may specify configurations for both General, and 
+                        Central Management configurations. The configurations that can be modified are as follows</p>
+                        <ul>
+                        	<li>
+                        		<strong>General:</strong> 
+                        		<ul>
+                        			<li>Start TransferAgent after installation: If selected, the TransferAgent will start after the installation is finished.</li>
+                        			<li>Use default download location if unavailable: If selected, the TransferAgent will migrate the download location
+                        			to the default location if it cannot be accessed or does not exist.</li>
+                        			<li>Download Location: Where the TransferAgent will download files to.</li>
+                        			<li>HTTP Port: The port that will be used when TransferAgent launches it's internal web server.</li>
+                        		</ul>
+                        	</li>
+                        	<li>
+                        		<strong>Central Management:</strong>
+                        		<ul>
+                        			<li>Enable Remote Monitoring: Allow TransferAgent to share statistics with and be controlled by FileCatalyst Central. Enabling this 
+                        			option will also recommended installing FileCatalyst TransferAgent as a system service.</li>
+                        			<li>Address: The address (IP or hostname) of FileCatalyst Central.</li>
+                        			<li>Port: The port at which FileCatalyst Central is found.</li>
+                        			<li>Username: The username needed to log into FileCatalyst Central and register TransferAgent for monitoring.</li>
+                        			<li>Password: The password needed to log into FileCatalyst Central and register TransferAgent for monitoring.</li>
+                        			<li>Alias: A name of your (or your administrator's) choosing, which will allow FileCatalyst Central administrators to easily identify your TransferAgent.</li>
+                        			<li>TransferAgent IP: The IP or domain name of this instance of the FileCatalyst TransferAgent. Use of domain name names is recommended.</li>
+                        		</ul>
+                        	</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="subsection">
+                        <h3 id="shortcuts">Shortcuts</h3>
+                        <p>The next step is the creation of short cuts.</p>
+                        <p><img src="images/installer_docs/installer6.png" title="Install Wizard Step 5 - Create Short Cuts"/></p>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 id="launch">Launch TransferAgent</h3>
+                        <p>The last step launches the TransferAgent.</p>
+                        <p><img src="images/installer_docs/TA-launching.png" title="Install Wizard Step 6 - Launch TransferAgent"/></p>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 id="finish">Finalize Installation</h3>
+                        <p>After creating short cuts, you have finished installing your application.
+                            Our installer informs you of the location of the uninstaller and is ready to exit.
+                        </p>
+                        <p><img src="images/installer_docs/installer7.png" title="Install Wizard Step 7 - Finalize Installation"/></p>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 id="upgrade">Upgrading the TransferAgent Application</h2>
+                    <p>Upgrading FileCatalyst TransferAgent requires a sequence of steps be taken based on the installation platform. 
+                       Some steps are optional (to safeguard configuration data in case of a rollback), but should be followed to ensure the smoothest upgrade experience.</p>
+                    <ol>
+  							<li><b>Stop the TransferAgent.</b>
+                			<br>If you are running FileCatalyst TransferAgent stand-alone (from "Start" menu), please right-click 
+                				on the tray icon and select the bottom menu item.
+                			<br><br>If you are running the TransferAgent as a service, please open up the Windows Services and stop the 
+                				process from running (default name is "FileCatalyst TransferAgent").</li>
+
+			              <li><b>Backup configuration files.</b>
+			                <br>If upgrading from v3.6 or less, you should copy the following configuration files into an "upgrade" folder.
+			                <ul>
+			                  <li>fcta.conf</li>
+			                  <li>origins.json</li>
+			                </ul>
+			                
+			            	<br>If upgrading from v3.7 or greater, you should also copy the following configuration files into an "upgrade" folder.
+			                <ul>
+			                  <li>sites.json</li>
+			                  <li>tawrapper.conf</li>
+			                  <li>www/express-src/js/config.js</li>
+			                </ul>
+			             </li>
+			
+			              <li><b>Run the installer (install_fc_transferagent.exe).</b></li>
+						  <li><b>Terminate the TransferAgent instance that started during the installer.</b></li>	
+						  <li><b>Copy back all of the files that you moved during step 2</b></li>
+			              <li><b>Restart the FileCatalyst TransferAgent application (either as a service or standalone).</b>
+			              </li>
+                    <ol>
+                </div>
+                
+                 <div class="section">
+                    <h2 id="uninstall_doc">Uninstalling the FileCatalyst TransferAgent Application</h2>
+                    <h3>Uninstall Steps</h3>
+                    <ul>
+             			<li>If you are running FileCatalyst TransferAgent stand-alone, find the TransferAgent tray icon, right-click, and select the "Exit FileCatalyst TransferAgent" option at the bottom of the menu options.</li>
+              			<li>If you are running TransferAgent as a service,&nbsp;click on&nbsp;'Start',&nbsp;search for services.msc, and then run that&nbsp;application</li>
+              			<li>Find the TransferAgent service and stop it</li>
+              			<li>Open &lsquo;Control Panel&rsquo;, navigate to &lsquo;Programs and Features&rsquo; and locate FileCatalyst TransferAgent. Click 'uninstall&rsquo; and check the box 'Force deletion...' when prompted</li>
+           			</ul>
+                </div>
+                
+            </div>
+        </div>
+
+        <script>
+            /* ------------------------------------------------------------------- *
+             * Automatic numbering of sections and generation of table of contents *
+             * ------------------------------------------------------------------- */
+
+            // cache a jQuery object for the node of the Table of Contents
+            $TOC = $('#tableOfContents>ol');
+            $TOC.empty();
+
+            /*** Iterate through each section (h2). Within each, iterate subsections. Within those, iterate bullet points. ***/
+            $('div.section').each(function(sectionNumber) {
+                sectionNumber++;
+                subLetter = 'a'; // subsections are lettered. Each new section's subsections start with a lowercase 'a'.
+
+                // cache jQuery objects for section iterator
+                $section = $(this);
+                $sectionHeader = $section.find('h2');
+
+                // Time for the work: add this section to the TOC, then update its header to show section #
+                $TOC.append('<li><a href="#' + $sectionHeader.attr('id') + '">' + $sectionHeader.html() + '</a></li>');
+                $sectionHeader.prepend(sectionNumber + '&nbsp;');
+
+                /************************ Subsections *******************************/
+                $subSection = $section.find('div.subsection');
+
+                // work to be done only if there is one (or more) subsection(s)
+                if ($subSection.length > 0) {
+
+                    // create a list within the last section's LI
+                    $TOC.find('li').last().append('<ol class="subContents"></ol>');
+
+                    $subSection.each(function(i) {
+                        // cache jQuery objects to be used
+                        $this = $(this);
+                        $subHeader = $this.find('h3');
+                        $TOCsub = $TOC.children('li').last().children('ol');
+
+                        // add this subSection to the TOC, then update its header to show section # and letter
+                        $TOCsub.append('<li><a href="#' + $subHeader.attr('id') + '">' + $subHeader.html() + '</a></li>');
+                        $subHeader.prepend(sectionNumber + '.' + subLetter + '&nbsp;');
+
+                        /*********** Points within Subsections **************/
+                        $subPoint = $this.find('h4');
+
+                        // Do the work only if there ARE points
+                        if ($subPoint.length > 0) {
+                            $TOCsub.find('li').last().append('<ol class="subContentsPoints"></ol>');
+
+                            $subPoint.each(function(j) {
+                                $this = $(this); // in this case, this is the h4
+                                $TOCpoints = $TOCsub.children('li').last().children('ol');
+                                $TOCpoints.append('<li><a href="#' + $this.attr('id') + '">' + $this.html() + '</a></li>');
+                            });
+                        }
+
+                        // increment the subsection letter for the next pass of the iterator
+                        subLetter = String.fromCharCode(subLetter.charCodeAt() + 1);
+                    });
+                } // end subsection conditional
+            });
+
+        </script>
+    </body>
+</html>

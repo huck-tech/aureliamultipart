@@ -1,0 +1,270 @@
+<html>
+    <head>
+        <title>FileCatalyst TransferAgent Linux Installation Guide</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <link rel="shortcut icon" href="images/favicon.ico"/>
+        <link href="style.css" rel="stylesheet" type="text/css" />
+        <script src="jquery.js"></script>
+    </head>
+
+    <body>
+        <div id="wrapper">
+            <div id="logo"><a id="top"></a>
+                <img src="images/header.png" alt="FileCatalyst Header Logo"/>
+                <h1>File<em>Catalyst</em> TransferAgent<br/>Linux Installation Guide</h1>
+            </div>
+
+            <div id="tableOfContents">
+                <h2>Table of Contents</h2>
+                <ol id="TOC">
+                    <li></li>
+                </ol>
+            </div>
+
+
+            <hr/> <!--not necessary once proper styles are built-->
+
+            <div id="mainContent">
+
+                <div class="section">
+                    <h2 id="req">System Requirements</h2>
+                    <p>
+                        On the end user side, FileCatalyst TransferAgent was designed to run on a multitude of
+                        operating systems and hardware configurations. Below are the minimum requirements:
+                    </p>
+                    <ul>
+                        <li>Dual Core, 2GB+ RAM, 80MB+ of free disk space</li>
+                        <li>Recent web browser: IE 8+, Safari (MacOS only), Chrome, Firefox</li>
+                        <li>Java 1.8 or higher</li>
+                        <li>Broadband Internet connection</li>
+                        <li>Network connectivity to FileCatalyst Direct Server, third party FTP servers are not supported</li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <h2 id="download">Download the Installer</h2>
+                    <p>The organization hosting the FileCatalyst-enabled file transfer page
+                        will provide a link to a version of FileCatalyst TransferAgent, typically
+                        but not always from the same dialog used to access this guide.</p>
+                    <p>Once the browser has completed downloading the installer, you will have to manually install
+					   the application on your system. Steps on how to perform installation process, can be found beloow found below. 
+                    </p>
+                </div>
+
+                <div class="section">
+                    <h2 id="html_document">Installer Process</h2>
+
+                    <div class="subsection">
+                        <h3 id="information">Installation Steps</h3>
+						<ol>
+							<li>Create a directory at /opt/utechsoft/transferagent</li>
+							<li>Download the TransferAgent tarball (fc_transferagent.tar.gz) into this directory </li>
+							<li>If a UI based unpacking tool is available, use that tool to unpack the TransferAgent tarball into the directory.
+							    If a UI unpacking tool is not available, then run the following commands from a terminal window.
+								<ul>
+									<li>cd /opt/utechsoft/transferagent</li>
+									<li>gunzip fc_transferagent.tar.gz</li>
+									<li>tar -xvf fc_transferagent.tar</li>
+								</ul>
+							</li>
+							<li>With the tarball unpacked, you will now have access to the installation README file. The rest of the installation steps that you will need for this application can be found there.</li>
+						</ol>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 id="upgrade">Upgrading the TransferAgent Application</h2>
+                    <p>Upgrading FileCatalyst TransferAgent requires a sequence of steps be taken based on the installation platform. 
+                       Some steps are optional (to safeguard configuration data in case of a rollback), but should be followed to ensure the smoothest upgrade experience.</p>
+                    <ol>
+			               <li><b>Stop the FileCatalyst TransferAgent.</b>
+			                <br>If you are running the FileCatalyst TransferAgent stand-alone (i.e. running fc_transferagent.sh or fc_transferagent_console.sh
+			                script), you need to shut FileCatalyst TransferAgent down before executing an upgrade. The following commands can be
+			                done to shut the service down and verify that processes are not running.
+			                <ul>
+			                  <li>Execute the command "fc_transferagent_shutdown.sh".</li>
+			                  <li>Verify the service is down by running the command: <code>ps -ef | egrep -i "filecatalystransferagent"</code></li>
+			                </ul>
+			                If you are running the FileCatalyst TransferAgent as a service, you need to shut it down using one of the following commands:
+			                <ul>
+			                  <li>Linux: <code>service fctransferagent stop</code></li>
+			                  <li>Solaris:  <code>svcadm -v disable fctransferagent</code></li>
+			                </ul>
+			              </li>
+
+			              <li><b>Backup configuration files.</b>
+			                <br>If upgrading from v3.6 or less, you should copy the following configuration files into an "upgrade" folder.
+			                <code>
+			                  cd /opt/utechsoft/transferagent/
+			                  <br>mkdir ./upgrade
+			                  <br>cp fcta.conf ./upgrade
+			                  <br>cp origins.json ./upgrade
+			                </code>
+			                
+			            	<br>If upgrading from v3.7 or greater, you should also copy the following configuration files into an "upgrade" folder.
+			            	
+			         		<code>
+			                  cp sites.json ./upgrade
+			                  <br>cp www/express-src/js/config.js ./upgrade
+			                </code>
+			             </li>
+			
+			             <li><b>Unpack the software.</b>
+                			<code>gunzip ./fc_transferagent.tar.gz
+                  			<br>tar -xvf ./fc_transferagent.tar
+			                </code>
+              			 </li>
+					     <li><b>Copy back all of the files that you moved during step 2</b></li>
+			             <li><b>Restart the FileCatalyst TransferAgent application (either as a service or standalone).</b></li>
+                    <ol>
+                </div>
+               
+ <div class="section">
+                    <h2 id="accessing">Accessing the TransferAgent Application</h2>
+                    <h3>Local web browser:</h3>
+					<p>On the Linux machine, start your favourite web browser go to <a href="https://localhost.filecatalyst.net:12680/config.html">
+					https://localhost.filecatalyst.net:12680/config.html</a> the port 12680 is used by default, change this value if you configured a different port.
+					</p>
+					<h3>Headless</h3>
+					<p>
+					See the <a href="#headless">Headless</a> Section					
+					</p>
+           		
+                </div>
+			   
+                
+               <div class="section">
+                    <h2 id="uninstall">Uninstalling the TransferAgent Application</h2>
+                    <h3>Uninstall Steps</h3>
+            		<p><em>Note: You may need admin access to perform some of these commands</em></p>
+            		<ul>
+              			<li>If you are running the FileCatalyst TransferAgent stand-alone, you will need to shut FileCatalyst TransferAgent down. To accomplish this, follow these steps:</li>
+              			<ul>
+              				<li>Open a new Terminal window</li>
+              				<li>Navigate to the folder where your TransferAgent is installed (e.g. /opt/utechsoft/transferagent/)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+              				<li>Execute the command './fc_transferagent_shutdown.sh'</li>
+              				<li>Verify the service is down by running the command ps -ef | egrep -i "filecatalyst"</li>
+              			</ul>
+              			<li>If you are running the FileCatalyst TransferAgent as a service stop the service by using the appropriate command for your version of Linux in the terminal window (Ubuntu e.g. "service fctransferagent stop") </li>
+            			<ul>
+                  			<li>Remove the service by navigating to service_wrapper folder located within the server folder (e.g. /opt/utechsoft/transferagent/service_wrapper)</li>
+                  			<li>Run ./uninstall.sh</li>
+                		</ul>
+              			</li>
+              			<li>You can now remove the folder structure by using rm -rf&nbsp; &lt;path to the server directory&gt; (e.g. rm -rf /opt/utechsoft/transferagent)</li>
+            		</ul>
+                </div>
+				
+				<div class="section">
+                    <h2 id="headless">Configuration on a headless system</h2>
+                    <h3>Linux headless (no monitor, keyboard or mouse)</h3>
+            		<p><em>Note: You may need admin access to perform some of these commands</em></p>
+					<code><pre>
+>cd /opt/utechsoft/transferagent
+- Stop TransferAgent service or via console
+>java -jar FileCatalystTransferAgent.jar -help  --> to read help on headless command prompt operation
+>java -jar FileCatalystTransferAgent.jar -configureCentral
+	
+		
+Please Enter A Value For Monitoring Enabled (Press ENTER To Use Default Value of true)
+true
+
+Please Enter A Value For Central IP (Press ENTER To Use Default Value of example.filecatalyst.com)
+example.filecatalyst.com --> use of domains instead of IP is highly recommended
+
+Please Enter A Value For Central Port (Press ENTER To Use Default Value of 12500)
+12500
+
+Please Enter A Value For Central Username (Press ENTER To Use Default Value of monitor)
+monitor
+
+Please Enter A Value For Central Password (Press ENTER To Use Default Value):
+-->Enter your password
+
+Please Enter A Value For Central Product Alias (Press ENTER To Use Default Value of demoTA)
+-->Enter some short descriptive name for the node, this will be used in Central
+
+Please Enter A Value For Central Product Host Name (Press ENTER To Use Default Value of example.filecatalyst.com)
+example.filecatalyst.com --> use of domains instead of IP is highly recommended
+
+Please Enter A Value For Central Product IP (Press ENTER To Use Default Value of 127.0.0.1)
+example.filecatalyst.com --> use of domains instead of IP is highly recommended
+	
+- Start TransferAgent Service or console
+					</pre></code>
+	<h5 id="centralTAsecurity">Central Security Model</h5>
+            <p>By default TransferAgent connected to Central will allow access to any path on the local system. 
+			This means that Central Administrator or any user assigned in Central to the node will be allowed to upload/download files to/from any arbitrary location 
+			on the system running TransferAgent connected to Central.</p>
+			<p>To limit access, at least one Virtual Path has to be created in TransferAgent. 
+			Creation/Deletion of virtual Paths as well as changing of the default download path is not allowed from Central. All Virtual Path operations have to be done locally and not via Central.
+			</p>
+            		
+                </div>
+				
+            </div>
+        </div>
+
+        <script>
+            /* ------------------------------------------------------------------- *
+             * Automatic numbering of sections and generation of table of contents *
+             * ------------------------------------------------------------------- */
+
+            // cache a jQuery object for the node of the Table of Contents
+            $TOC = $('#tableOfContents>ol');
+            $TOC.empty();
+
+            /*** Iterate through each section (h2). Within each, iterate subsections. Within those, iterate bullet points. ***/
+            $('div.section').each(function(sectionNumber) {
+                sectionNumber++;
+                subLetter = 'a'; // subsections are lettered. Each new section's subsections start with a lowercase 'a'.
+
+                // cache jQuery objects for section iterator
+                $section = $(this);
+                $sectionHeader = $section.find('h2');
+
+                // Time for the work: add this section to the TOC, then update its header to show section #
+                $TOC.append('<li><a href="#' + $sectionHeader.attr('id') + '">' + $sectionHeader.html() + '</a></li>');
+                $sectionHeader.prepend(sectionNumber + '&nbsp;');
+
+                /************************ Subsections *******************************/
+                $subSection = $section.find('div.subsection');
+
+                // work to be done only if there is one (or more) subsection(s)
+                if ($subSection.length > 0) {
+
+                    // create a list within the last section's LI
+                    $TOC.find('li').last().append('<ol class="subContents"></ol>');
+
+                    $subSection.each(function(i) {
+                        // cache jQuery objects to be used
+                        $this = $(this);
+                        $subHeader = $this.find('h3');
+                        $TOCsub = $TOC.children('li').last().children('ol');
+
+                        // add this subSection to the TOC, then update its header to show section # and letter
+                        $TOCsub.append('<li><a href="#' + $subHeader.attr('id') + '">' + $subHeader.html() + '</a></li>');
+                        $subHeader.prepend(sectionNumber + '.' + subLetter + '&nbsp;');
+
+                        /*********** Points within Subsections **************/
+                        $subPoint = $this.find('h4');
+
+                        // Do the work only if there ARE points
+                        if ($subPoint.length > 0) {
+                            $TOCsub.find('li').last().append('<ol class="subContentsPoints"></ol>');
+
+                            $subPoint.each(function(j) {
+                                $this = $(this); // in this case, this is the h4
+                                $TOCpoints = $TOCsub.children('li').last().children('ol');
+                                $TOCpoints.append('<li><a href="#' + $this.attr('id') + '">' + $this.html() + '</a></li>');
+                            });
+                        }
+
+                        // increment the subsection letter for the next pass of the iterator
+                        subLetter = String.fromCharCode(subLetter.charCodeAt() + 1);
+                    });
+                } // end subsection conditional
+            });
+
+        </script>
+    </body>
+</html>

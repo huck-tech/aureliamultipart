@@ -1,0 +1,99 @@
+<template>
+    <require from="helpers/formatters"></require>
+    <!-- Upload Details Modal -->
+    <div id="current - upload - modal " class="modal fade " role="dialog ">
+        <div class="modal - dialog ">
+            <!-- Modal content-->
+            <div class="modal - content clippn - dark - gray - bkg ">
+                <div if.bind="!isLoading && !loadFailed ">
+                    <div class="modal - header ">
+                        <button type="button " class="close pull - right " data-dismiss="modal ">&times;</button>
+                        <div class="col - lg - 11 no - padding ">
+                            <h3 class="panel - title ">${data.package_name}</h3>
+                            <p class="clip - description ">${data.package_description}</p>
+                        </div>
+                        <div class="row clearfix ">
+                            <div class="col - lg - 12 ">
+                                <h5 class="uploading - count "> ${data.asset_package.length} Video${data.asset_package.length !== 1 ? 's' : ''}${data.releases.length > 0 ? ', ' + data.releases.length + ' Releases' : ''}</h5>
+                                <!-- <p>Uploaded by ${data.user.firstName} ${data.user.lastName} at ${data.created | dateFormat:'MM/DD/YYYY hh:mm:ss'} -->
+                                    <button if.bind="user.isAdmin && (!data.status || data.status.name === 'Uploading' || data.status.name === 'Ingesting')" class="btn btn - danger pull - right " 
+                                    style="width: 80 px;height: 28 px;margin - right: 5 px;padding: 0;" click.delegate="failPackage()"> <i class="fa fa - exclamation - triangle "></i> Fail </button>
+                                    <button if.bind="user.isAdmin && data.status.name !== 'Ready'" class="btn btn - primary pull - right " style="width: 80 px;height: 28 px;margin - right: 5 px;padding: 0;" click.delegate="repairPackage()"> <i class="fa fa - wrench "></i> Repair </button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="modal - body ">
+                        <h5 style="margin - left: 15 px;color: #e8e8eb;">Videos</h5>
+                        <div class="row file - status - $ {clip.status.className}" repeat.for="clip of data.clips ">
+                            <div class="upload - file - details ">
+                                <div class="file - name "> ${clip.fileName}
+                                    <p if.bind="clip.generatedClips.length > 0 " class="generated - clips "> <i if.bind="clip.generatedClips.length > 0 && !clip.isExpanded " class="fa fa - plus - circle " click.trigger="expandClip(clip)"></i> 
+                                    <i if.bind="clip.generatedClips.length > 0 && clip.isExpanded " class="fa fa - minus - circle " click.trigger="collapseClip(clip)"></i>
+                                     ${clip.generatedClips.length} generated clip${clip.generatedClips.length !== 1 ? 's' : ''} </p>
+                                </div>
+                                <div class="file - size ">${clip.fileSize | sizeInBytes}</div>
+                                <div class="file - status "> <i class="fa fa - $ {clip.status.iconName}"></i>${clip.status.displayName} </div>
+                                <div class="action - button ">
+                                    <label for="$ {'retryFileSelector_' + clip.id}"
+                                    if.bind="clip.status.name === 'UploadFailed' && clip.assetId && clip.assetId !== ''" 
+                                    class="btn btn - success " style="margin - left: 0;">
+                                    <i class="fa fa - upload "></i>
+                                    </label>
+                                    <input id="$ {'retryFileSelector_' + clip.id}" type="file " class="hidden - file - input " change.trigger="retryAssetUpload(clip)" /> </div>
+                            </div>
+                            <div class="upload - file - clips " if.bind="clip.isExpanded ">
+                            <span if.bind="!clip.areGeneratedClipsLoaded ">Loading....</span>
+                                <ul class="generated - clips - list clearfix " if.bind="clip.areGeneratedClipsLoaded ">
+                                    <li repeat.for="generatedClip of clip.generatedClips ">
+                                        <div class="col - lg - 6 file - name ">${generatedClip.title}</div>
+                                        <div class="col - lg - 3 file - size ">${generatedClip.duration}</div>
+                                        <div class="col - lg - 3 file - status "> <i class="fa fa - $ {generatedClip.status.iconName}"></i>${generatedClip.status.displayValue} </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h5 if.bind="data.releases && data.releases.length > 0 " style="margin - left: 15 px;
+                            margin - top: 30 px;color: #e8e8eb;">Releases</h5>
+                        <div if.bind="data.releases && data.releases.length > 0 " class="row file - status - $ {release.status.className}" repeat.for="release of data.releases ">
+                            <div class="upload - file - details ">
+                                <div class="file - name "> ${release.fileName} </div>
+                                <div class="file - size ">${release.fileSize | sizeInBytes}</div>
+                                <div class="file - status "> <i class="fa fa - $ {release.status.iconName}"></i>${release.status.displayName} </div>
+                                <div class="action - button ">
+                                    <label for="$ {'retryFileSelector_' + release.id}" if.bind="release.status.name === 'UploadFailed' && release.assetId && release.assetId !== ''" class="btn btn - success " style="margin - left: 0;"><i class="fa fa - upload "></i>
+                                    </label>
+                                    <input id="$ {'retryFileSelector_' + release.id}" type="file " class="hidden - file - input " change.trigger="retryAssetUpload(release)" /> </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal - footer " style="text - align: center;">
+                        <button if.bind="canBeCompleted " type="button " class="btn btn - primary " click.delegate="markPackageCompleted()"><i class="fa fa - check "></i> Mark Package Complete</button>
+                    </div> -->
+                </div>
+                <div if.bind="isLoading || loadFailed " class="flex - centered flex - column " style="height: 250 px;">
+                    <div style="align - self: flex - end;margin - top: 10 px;margin - right: 15 px;">
+                        <button type="button " class="close pull - right " data-dismiss="modal ">&times;</button>
+                    </div>
+                    <div if.bind="isLoading " class="flex - centered flex - column " style="flex: 1;"> <img width="50 " style="margin: 15 px 0;" src="../images/loading_spinner_green_1.gif " />
+                        <h3>Loading...</h3> </div>
+                    <div if.bind="loadFailed " class="flex - centered " style="flex: 1;">
+                        <p iclass="validation - error " style="font - style: italic;font - size: 16 pt;">An unexpected error occurred. Please try again.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="retryMessageModal " class="modal fade " style="z - index: 10000;">
+        <div class="modal - dialog " style="margin - top: 12 % ;">
+            <!-- Modal content-->
+            <div class="modal - content clippn - dark - gray - bkg text - center " style="
+        display: flex;flex - direction: column;margin:auto;width:400 px;padding:5 px 10 px 20 px 10 px;border-radius:8 px;">
+                <p style="padding: 10 px;margin: 10 px;font - size: 13 pt;">${retryMessage}</p>
+                <div>
+                    <button class="btn btn - primary " data-dismiss="modal " style="padding: 2 px 20 px;">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

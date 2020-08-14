@@ -1,0 +1,83 @@
+<template>
+    <require from= "helpers/formatters"></require>
+    <require from= "helpers/date-picker-attribute"></require>
+    <require from= "widgets/pager"></require>
+    <main class= "clips-page">
+        <section id= "content" class= "container clippn-black-bkg">
+            <div id= "clip-filters" class= "row">
+                <div class= "text-inputs">
+                    <div class= "col-md-3">
+                        <div class= "form-group">
+                            <label for= "usr">Search:</label>
+                            <input type= "text" class= "form-control" placeholder= "Enter search term..." value.bind= "searchText" keypress.trigger= "handleKeyPress($event)"> </div>
+                    </div>
+                </div>
+                <div class= "col-md-2 col-sm-6 col-xs-6">
+                    <div class= "form-group">
+                        <label for= "usr">From:</label>
+                        <input id= "clipsSearchFromDate" type= "text" class= "form-control" placeholder= "Anytime" date-picker value.bind= "fromDate & validate" keypress.trigger= "handleKeyPress($event)"> </div>
+                </div>
+                <div class= "col-md-2 col-sm-6 col-xs-6">
+                    <div class= "form-group">
+                        <label for= "usr">To:</label>
+                        <input id= "clipsSearchToDate" type= "text" class= "form-control" placeholder= "Anytime" date-picker value.bind= "toDate & validate" keypress.trigger= "handleKeyPress($event)"> </div>
+                </div>
+                <div class= "sort-inputs">
+                    <div class= "col-md-3 sorting">
+                        <label class= "checkbox-inline">
+                            <input type= "checkbox" name= "optradio" checked.bind= "unreadOnly">Unread only</label>
+                    </div>
+                </div>
+                <div class= "col-md-1">
+                    <button class= "clips-filter-button search-button" click.trigger= "search()">GO</button>
+                </div>
+            </div>
+            <div if.bind= "validationError" class= "col-lg-12 col-md-12 col-sm-12 col-xs-12 validation-error clips-validation-error">${validationError.message}</div>
+            <div if.bind= "!isLoading">
+                <pager page-number.two-way= "pageNumber" page-size.two-way= "pageSize" num-results.bind= "numResults" requires-update.bind= "updatePages"></pager>
+            </div>
+            <div id= "clip-list" class= "row">
+                <div repeat.for= "rawClip of rawClips" class= "clip-preview col-md-3 col-sm-6 clippn-dark-gray-bkg" data-toggle= "modal" data-target= "#feedbackDetailsModal" click.trigger= "setSelectedRawClip(rawClip)">
+                    <div class= "video-poster">
+                        <div class= "has-feedback" if.bind= "rawClip.hasUnreadFeedback"><i class= "fa fa-comment-o"></i><span class= "feedback-badge">!</span>
+                        </div> <img src= "${rawClip.thumbnailUrl}" class= "img-responsive" alt= "Responsive image"> </div>
+                    <div class= "col-md-12">
+                        <h5 class= "clip-title">${rawClip.name}</h5>
+                        <h5 class= "col-sm-4 clip-duration">${rawClip.duration}</h5>
+                        <h5 class= "col-sm-4 time-stamp pull-right">${rawClip.created | dateFormat:'MMM Do, YYYY'}</h5> </div>
+                </div>
+            </div>
+            <div if.bind= "isLoading" class= "flex-centered flex-column col-md-12 col-sm-12" style= "margin-top: 75px;"> <img style= "margin: auto;" width= "70" src= "../images/loading_spinner_green_1.gif" />
+                <h3>Loading...</h3> </div>
+            <div if.bind= "noResults || hasError" class= "flex-centered flex-column" style= "margin-top: 75px;">
+                <p if.bind= "noResults" style= "font-style: italic; font-size: 18pt;">No clips found</p>
+                <p if.bind= "hasError" class= "validation-error" style= "font-style: italic; font-size: 16pt;">An unexpected error occurred. Please try again.</p>
+            </div>
+        </section>
+    </main>
+    <!-- Modal -->
+    <div id= "feedbackDetailsModal" class= "modal fade feedback" role= "dialog">
+        <div class= "modal-dialog large-modal">
+            <!-- Modal content-->
+            <div class= "modal-content clippn-dark-gray-bkg">
+                <div class= "modal-header">
+                    <button type= "button" class= "close" data-dismiss= "modal">&times;</button>
+                    <h3 class= "modal-title">${selectedRawClip.name}</h3>
+                    <p>Uploaded by ${selectedRawClip.contributorFullName}</p>
+                </div>
+                <div class= "modal-body">
+                    <div class= "col-lg-8 col-md-12 col-sm-12 col-xs-12"> <span class= "video-resolution video-${selectedRawClip.resolutionClass}">${selectedRawClip.resolutionDisplay}</span>
+                        <video id= "feedbackClipPlayer" class= "col-lg-12 col-md-12 col-sm-12 col-xs-12" src= "${selectedRawClip.proxyUrl}" controls></video>
+                        <h5 class= "col-sm-4 col-xs-4 clip-duration">${selectedRawClip.duration}</h5>
+                        <h5 class= "col-sm-4 col-xs-4 time-stamp pull-right">${selectedRawClip.created | dateFormat:'MMM Do, YYYY'}</h5> </div>
+                    <div class= "col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                        <h5 class= "read-clip-feedback">                            Clip Feedback                            <button class="btn btn-secondary pull-right">                                <span class="feedback-status feedback-unread" if.bind="selectedClipHasUnreadFeedback" click.trigger="toggleFeedbackRead()">Mark as Read</span>                                <span class="feedback-status feedback-read" if.bind="!selectedClipHasUnreadFeedback" click.trigger="toggleFeedbackRead()">READ <i class="fa fa-check"></i> </span>                            </button>                        </h5>
+                        <hr>
+                        <p class= "clip-feedback">${selectedRawClip.feedback}</p>
+                    </div>
+                </div>
+                <div class= "modal-footer"> </div>
+            </div>
+        </div>
+    </div>
+</template>

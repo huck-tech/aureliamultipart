@@ -1,0 +1,372 @@
+/* =========================================================================
+   Main CSS
+   ========================================================================= */
+
+body { padding: 20px; min-height: 100vh}
+.unknown { display: none; }
+
+table {margin-bottom: 20px; width:100%}
+.pointer {cursor: pointer}
+td, th { padding: 3px }
+td {overflow: hidden}
+th { text-align: left;      
+     border-top: none;
+     border-bottom: none;
+}
+td.size {text-align: right;}
+th.unit, td.unit {width: 30px;}
+th.modified, td.modified {width: 100px;}
+th.iconColumn {width: 24px;}
+th.name {width: 50%;}
+th.size {width: 50px;}
+td.statusLabel { width: 160px;}
+
+td[class^="icon-"], td[class*=" icon-"] {
+  height: 16px;
+  width: 16px;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.table th.headerSortDown, .table th.headerSortUp, th.sortable {
+  background-repeat: no-repeat;
+  background-position: center right;
+  padding-right:20px !important;
+}
+th.sortable {
+  background-image: url('../images/nosort.png');
+}
+.table th.headerSortDown {
+  background-image: url('../images/asc.png');
+}
+.table th.headerSortUp {
+  background-image: url('../images/desc.png');
+}
+
+table.fileList {
+  table-layout: fixed;
+  overflow: hidden;  
+}
+
+table.fileList td, .filequeue td {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+table.fileList th {
+  border-right: 2px solid #ddd;
+}
+
+.progress-large {
+  height: 30px;
+}
+
+.overLabel, th.status-currentFilename {
+  width: 30%
+}
+
+th.status-currentPercent {
+  width: 50%
+}
+
+.pathValue {
+  width: 50%
+}
+
+.ta-area, .ta-list {
+  margin-bottom: 20px;
+}
+
+.ta-list, .ta-queue {
+  min-height: 70px;
+  max-height: 650px;
+  overflow: auto;
+}
+
+.ta-list thead {
+  background-color: #fff;
+}
+
+.filequeue {
+  margin-bottom: 0
+}
+
+.filequeue .glyphicon-remove-circle {
+  float: right;
+  margin-left: 20px;
+}
+
+.filequeue li:hover {
+  background-color: rgba(0,0,0,0.1);  
+}
+
+iframe[seamless]{
+  background-color: transparent;
+  border: 0px none transparent;
+  padding: 0px;
+  overflow: hidden;
+  width: 100%;
+  height: 900px;
+}
+
+.hide {
+  display: none !important;
+}
+
+.show {
+  display: block !important;
+}
+
+.wait {
+  cursor: wait !important;
+}
+
+.floatLeft {
+  float: left;
+}
+
+.componentContainer {margin-bottom: 20px;}
+
+td.removeOrigin {
+  cursor: pointer;
+}
+
+td.configLabelCell {
+  width: 250px;
+}
+
+td.configInputCell input {
+  width: 100%
+}
+
+/* .modal-footer, .filecatalystLogo {
+  background-image: url(../images/filecatalyst_small.png);
+  background-repeat: no-repeat;
+} */
+
+/* .modal-footer {
+  background-position: right 40px bottom 20px;
+  background-size: 20%
+} */
+
+.filecatalystLogo {
+  background-size: contain;
+  height: 50px;
+  width: 140px;
+  margin-bottom: 1em;
+}
+
+
+/* -------------------------------------- */
+/* Spinner - Duplicated from Font Awesome */
+/* -------------------------------------- */
+.spinnerWidget {
+  position: absolute;
+  left: 40%;
+  top: 40%;  
+  margin:auto;
+  color: white;
+  z-index: 1031;
+}
+
+.spinner {
+  margin-left: auto;
+  margin-right: auto;
+  height: 120px;
+  width: 120px;
+  -webkit-animation: spin .6s infinite linear;
+  -moz-animation: spin .6s infinite linear;
+  -o-animation: spin .6s infinite linear;
+  animation: spin .6s infinite linear;
+  border-left:16px solid rgba(255,255,255,.15);
+  border-right:16px solid rgba(255,255,255,.15);
+  border-bottom:16px solid rgba(255,255,255,.15);
+  border-top:16px solid rgba(255,255,255,.8);
+  border-radius:100%;
+}
+
+.spinnerText {
+  text-align:center;
+  vertical-align:center;
+}
+
+.fa-spin {
+  -webkit-animation: spin 2s infinite linear;
+  -moz-animation: spin 2s infinite linear;
+  -o-animation: spin 2s infinite linear;
+  animation: spin 2s infinite linear;
+}
+@-moz-keyframes spin {
+  0% {
+  -moz-transform: rotate(0deg);
+}
+100% {
+  -moz-transform: rotate(359deg);
+}
+}
+@-webkit-keyframes spin {
+  0% {
+  -webkit-transform: rotate(0deg);
+}
+100% {
+  -webkit-transform: rotate(359deg);
+}
+}
+@-o-keyframes spin {
+  0% {
+  -o-transform: rotate(0deg);
+}
+100% {
+  -o-transform: rotate(359deg);
+}
+}
+@-ms-keyframes spin {
+  0% {
+  -ms-transform: rotate(0deg);
+}
+100% {
+  -ms-transform: rotate(359deg);
+}
+}
+@keyframes spin {
+  0% {
+  transform: rotate(0deg);
+}
+100% {
+  transform: rotate(359deg);
+}
+}
+
+/* ------------------- */
+/* Bootstrap overrides */
+/* ------------------- */
+
+.ta-controls .btn {
+  margin-right: 10px;
+}
+
+.ta-controls {
+  margin-bottom: 8px;
+}
+
+.ta-controls .btn:last-child, .input-group-btn .btn, .btn-group .btn {
+  margin-right: 0;
+}
+
+.jumbotron {
+  background-color: #E5F5FC;
+}
+
+.jumbotron h1, .jumbotron h2 {
+  color: #2D5C88; /* #09337B is FC blue */
+}
+
+/* .navbar-inverse {
+  background-image: -webkit-gradient(linear,left 0,left 100%,from(#2D5C88),to(#254d72));
+  background-image: -webkit-linear-gradient(top,#2D5C88,0%,#254d72,100%);
+  background-image: -moz-linear-gradient(top,#2D5C88 0,#254d72 100%);
+  background-image: linear-gradient(to bottom,#2D5C88 0,#254d72 100%);
+  background-repeat: repeat-x;
+} */
+
+.navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav>li>a {
+  color: #dbedff;
+}
+
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus  {
+  background-color: #234768
+}
+
+/* .progress-bar {
+  transition: width 1s; /* will not work with complete re-render method. Must have width updated */
+/* } */
+
+table .progress {
+  margin-bottom: 0;
+}
+
+.fade{-webkit-transition: opacity 0.25s linear;transition: opacity 0.25s linear;}
+
+.componentContainer .glyphicon, .componentContainer .fa { color: #3a87ad; }
+.componentContainer .specialDirectory .glyphicon, .componentContainer .specialDirectory .fa { color: #519EC1; }
+.componentContainer { font-size: 0.8em }
+
+h4.panel-title a:hover {
+  text-decoration: none;
+  color: #3a87ad;
+}
+
+input[type="checkbox"].form-horizontal-checkbox {
+    float: right;
+    margin-top: 0.75em;
+}
+
+.menu-top{
+    padding-top: 80px;
+}
+.top-nav-header{
+    background: linear-gradient(to bottom, #eeeeee 0%, #e2e2e2 100%);
+}
+.navbar.top-nav-header{
+    min-height:60px;
+}
+.navbar-brand{
+    min-width: 125px;
+    margin: 5px 0 5px 5px;
+    background-image: url("../images/filecatalyst_small.png");
+    background-repeat: no-repeat;
+    background-size: auto 50px;
+	height: 50px;
+}
+.navbar.top-nav-header .nav > li {
+    padding-top: 5px;
+}
+.navbar-header button i{
+    color: #3a87ad;
+    font-size: 24px;
+}
+#removeSavedLogin{
+    float: right !important;
+    padding-top: 20px;
+    padding-bottom: 20px;
+	margin-right: 20px;
+	cursor: pointer;
+}
+#removeSavedLogin button:last-child{
+    margin-left: 15px;
+}
+.jumbotron {
+    padding: 30px 15px;
+    margin-bottom: 30px;
+    color: inherit;
+    background-color: #eee;
+}
+.ta-queue{
+    max-height: 600px;
+    overflow-y: scroll;
+}
+.icon-invalid, .icon-valid{
+	display: none;
+}
+.componentContainer .valid .icon-valid, .componentContainer .valid .icon-valid .fa{
+	display: inline-block;
+	color: green;
+}
+.componentContainer .invalid .icon-invalid, .componentContainer .invalid .icon-invalid .fa{
+	display: inline-block;
+	color: red;
+}
+#removeSavedLogin.headless{
+    padding-top: 10px;
+    padding-bottom: 0px;
+    margin-right: 0px;
+    margin-left: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}

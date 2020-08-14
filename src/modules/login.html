@@ -1,0 +1,81 @@
+<template>
+<!-- <router-view> -->
+	<div id="wrapper">
+		<main class="dashboard">
+			<section id="login" class="clippn-black-bkg">
+				<div class="container-fluid">
+					<div class="flex-centered login-logo">
+							<img class="logo" src="images/clippn-logo" alt="Clippn">
+					</div>
+					<h4 class="flex-centered outage"></h4>
+					<div class="login-section">
+						<div class="modal-content clippn-dark-gray-bkg flex-column">
+							<div class="modal-header">
+							<!--<h4 class="modal-title step-1" data-step="1">Sign in to Your</h4>-->
+								<h3 class="text-center">SIGN IN</h3>
+							</div>
+							<div class="modal-body">
+								<div class="col-md-12 no-padding">
+									<div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+										<label for="usr">Email Address:
+										</label>
+										<input id="e-mail" type="text" class="form-control" placeholder="Your Email" value.bind="userName" disabled.bind="loggingIn">
+									</div>
+									<div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+										<label for="usr">Password:
+										</label>
+										<input id="password" type="password" class="form-control" placeholder="Your Password" value.bind="password" disabled.bind="loggingIn" keypress.trigger="handleKeyPress($event)">
+									</div>
+									<div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+									<label class="checkbox-inline">
+										<input type="checkbox" name="optcheck-com" disabled.bind="loggingIn" checked.bind="user.rememberMe">Remember Me
+									</label>
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<div class="col-md-12 text-center">
+									<button id="login-to-dashboard" type="button" class="btn btn-primary text-center" if.bind="!loggingIn" click.delegate="getToken()" style="margin-top: 30px;">GO TO DASHBOARD
+									</button>
+									<div class="progress progress-striped active" if.bind="loggingIn" style="width: 35%; margin: 10px auto 36px auto;">
+									<div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+									</div>
+									</div>
+									<div if.bind="errorMsg !== null" class="validation-error">${errorMsg}
+									</div>
+									<p style="margin-top: 10px;">FORGOT PASSWORD? <a href="#/forgot-password">Reset your password here.</a>
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+	</div>
+    <footer class= "clippn-black-bkg footer clearfix">
+			<div class= "container">
+				<!-- <div if.bind="!subdomainIsCorporate" class= "col-sm-12 text-center">
+					<p>Don't have a Clippn Account?&nbsp;&nbsp;<a href="${registrationUrl}">Sign Up Today</a>!
+					</p>
+				</div> -->
+				<div class= "col-sm-12 text-center"> <!-- <img class= "powered-by-logo" alt= "Powered By Clippn" src= "images/powered-by" onerror= "this.style.display='none'"> -->
+					<p class= "copy">Copyright 2018 Clippn. All rights reserved.&nbsp;&nbsp;<a href= "#/privacy">Privacy Policy</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href= "#/terms-of-use">Terms of Use</a>
+					</p>
+					<a class="btn btn-social-icon btn-twitter" href="https://twitter.com/Clippn_Inc" target="_blank">
+				   <span class="fa fa-twitter"></span>
+					 </a>
+					<a class="btn btn-social-icon btn-facebook"  href="https://www.facebook.com/clippn/" target="_blank">
+					<span class="fa fa-facebook"></span>
+					</a>
+					<a class="btn btn-social-icon btn-instagram" href= "https://www.instagram.com/clippn_inc/" target="_blank">
+					<span class="fa fa-instagram"></span>
+					</a>
+					<a class="btn btn-social-icon btn-linkedin"  href="https://www.linkedin.com/company/clippn" target="_blank">
+					<span class="fa fa-linkedin"></span>
+					</a>
+				</div>
+			</div>
+		</footer>
+	<!-- </router-view> -->
+</template>

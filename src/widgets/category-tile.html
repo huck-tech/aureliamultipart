@@ -1,0 +1,6 @@
+<template>
+    <div data-key= "${data.normalizedName}" data-title= "${data.categoryName.toUpperCase()}" class= "${data.normalizedName} variety-matrix-cell variety-matrix-cell-${data.heatIndex} text-center col-xs-2">
+        <div class= "variety-matrix-clip-count" css= "display: ${showCount ? 'block' : 'none'}">${data.clipCount}</div>
+        <div class= "variety-matrix-icon"></div>
+        <div class= "variety-matrix-cell-label">${data.categoryName}</div>
+        <div class= "variety-matrix-suggested"></div> </div></template>

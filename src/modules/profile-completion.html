@@ -1,0 +1,158 @@
+<template>
+    <section class="clippn-black-bkg">
+        <div class="container-fluid">
+            <div class="login-logo col-md-12 text-center no-padding">
+                <a href="index.html"><img class="logo" src="images/clippn-white.png" alt="Clippn" height="45" width="239">
+                </a>
+            </div>
+            <form class="multi-step" id="onboardingWizard">
+                <div class="modal-dialog profile-completion-modal" if.bind="stepNumber === 1">
+                    <div class="modal-content clippn-dark-gray-bkg">
+                        <div class="modal-header">
+                            <h3>YOUR CLIPPN PROFILE: <span class="modal-step">STEP 1<span class="m-progress-current"></span>/ 4</h3>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 25%"> <span class="sr-only">25% Complete (success)</span> </div>
+                            </div>
+                            <h4 class="modal-title step-1" data-step="1">CLIPPN CONTRIBUTOR AGREEMENT</h4> </div>
+                        <!--STEP 1-->
+                        <div class="modal-body step-1" data-step="1">
+                            <div class="col-md-12 no-padding">
+                                <div class="form-group col-md-12 clippn-subtle-gray flex-centered" style="min-height: 200px;"> <img if.bind="loadingContract" style="margin: auto;" width="100" src="../images/loading_spinner_green_1.gif" />
+                                    <p if.bind="!loadingContract" class="${contractLoadFailed ? 'validation-error' : ''}" innerhtml.bind="contractText"></p>
+                                </div>
+                                <div class="col-md-12 clearfix flex-centered">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" checked.bind="contractAccepted">I accept the agreement</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div show.bind="contractAccepted" if.bind="showPayment" class="modal-footer row">
+                            <div class="col-md-12">
+                                <div id="dropin-container"></div>
+                                    <button id="submit-button">Request payment method</button>
+                            </div>
+                        </div>
+                        <div class="modal-footer row">
+                            <div class="col-md-12">
+                                <button if.bind="membershipPaid" type="button" class="btn btn-primary text-center step step-1" data-step="1" click.trigger="signContract()">Continue</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-dialog profile-completion-modal" if.bind="stepNumber === 2">
+                    <div class="modal-content clippn-dark-gray-bkg">
+                        <div class="modal-header">
+                            <h3>YOUR CLIPPN PROFILE: <span class="modal-step">STEP 2<span class="m-progress-current"></span>/ 4</h3>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%"> <span class="sr-only">50% Complete (success)</span> </div>
+                            </div>
+                            <h4 class="modal-title step-2" data-step="2">ADD PERSONAL INFO</h4> </div>
+                        <div class="modal-body step-3" data-step="3">
+                            <div class="col-md-12 no-padding">
+                                <div class="form-group col-md-6">
+                                    <label for="usr">Address 1:</label>
+                                    <input type="text" class="form-control" placeholder="Address Line 1" value.bind="contactInfo.addressLine1"> </div>
+                                <div class="form-group col-md-6">
+                                    <label for="usr">Address 2:</label>
+                                    <input type="text" class="form-control" placeholder="Address Line 2" value.bind="contactInfo.addressLine2"> </div>
+                                <div class="form-group col-md-6">
+                                    <label for="usr">City:</label>
+                                    <input type="text" class="form-control" placeholder="City" value.bind="contactInfo.city"> </div>
+                                <div class="form-group col-md-6">
+                                    <label for="usr">State/Province:</label>
+                                    <input type="text" class="form-control" placeholder="State/Province" value.bind="contactInfo.stateOrProvince"> </div>
+                                <div class="form-group col-md-4">
+                                    <label for="usr">Country:</label>
+                                    <select class="form-control" placeholder="Country" value.bind="selectedCountry">
+                                        <option>Select your country</option>
+                                        <option repeat.for="country of sortedCountries" model.bind="country">${country.name}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="usr">ZIP/Postal Code:</label>
+                                    <input type="text" class="form-control" placeholder="ZIP/Postal" value.bind="contactInfo.zipCode"> </div>
+                                <div class="form-group col-md-4">
+                                    <label for="usr">Phone:</label>
+                                    <input type="text" class="form-control" placeholder="Phone" value.bind="contactInfo.phoneNumber"> </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer row">
+                            <div class="col-md-12">
+                                <button type="button" class="btn btn-secondary text-center step step-2" click.trigger="complete()">Skip and Finish Later</button>
+                                <button type="button" class="btn btn-primary text-center step step-2" click.trigger="updateContactInfo()">Continue</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-dialog profile-completion-modal" if.bind="stepNumber === 3">
+                    <div class="modal-content clippn-dark-gray-bkg">
+                        <div class="modal-header">
+                            <h3>YOUR CLIPPN PROFILE: <span class="modal-step">STEP 3<span class="m-progress-current"></span>/ 4</h3>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"> <span class="sr-only">75% Complete (success)</span> </div>
+                            </div>
+                            <h4 class="modal-title step-3" data-step="3">ADD PAYMENT INFORMATION</h4> </div>
+                        <div class="modal-body step-2" data-step="2">
+                            <div class="col-md-12 ">
+                                <iframe src="${paymentInfoIframeUrl}" css="${paymentInfoIframeLoading ? 'display: none;' : 'width: 100%; height: 500px;'}"></iframe>
+                                <div if.bind="paymentInfoIframeLoading" style="height: 150px; width: 100%; display: flex; justify-content: center; align-items: center; flex-direction: column;"> <img alt="Loading..." style="margin: auto;" width="60" src="../images/loading_spinner_green_1.gif" />
+                                    <p style="font-size: 15pt; border: 0;">Loading payment info from Tipalti...</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer row">
+                            <div class="col-md-12">
+                                <button type="button" class="btn btn-secondary text-center step step-3" click.trigger="moveBack()">Back</button>
+                                <button type="button" class="btn btn-secondary text-center step step-3" click.trigger="complete()">Skip and Finish Later</button>
+                                <button type="button" class="btn btn-primary text-center step step-3" click.trigger="moveNext()">Continue</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-dialog profile-completion-modal" if.bind="stepNumber === 4">
+                    <div class="modal-content clippn-dark-gray-bkg">
+                        <div class="modal-header">
+                            <h3>YOUR CLIPPN PROFILE: <span class="modal-step">STEP 4<span class="m-progress-current"></span>/ 4</h3>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"> <span class="sr-only">100% Complete (success)</span> </div>
+                            </div>
+                            <h4 class="modal-title step-4" data-step="4">COMPLETE PROFILE</h4> </div>
+                        <!--STEP 4-->
+                        <div class="modal-body step-4" data-step="4">
+                            <div class="col-md-12 no-padding">
+                                <div class="form-group col-md-12 owns-4k">
+                                    <label for="usr">Do You Own a 4K Camera?</label>
+                                    <input type="radio" name="optradio" checked.bind="owns4KCamera">
+                                    <label>Yes</label>
+                                    <input type="radio" name="optradio" checked.bind="doesntOwn4KCamera">
+                                    <label>No</label>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label for="usr">What do you enjoy filming?</label>
+                                    <textarea class="form-control" rows="3" id="comment" placeholder="Tell us what you like to film" value.bind="additionalInfo.interestsInfo"></textarea>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label for="usr">Where do you like to travel?</label>
+                                    <textarea class="form-control" rows="3" id="comment" placeholder="Tell us about favorite destinations" value.bind="additionalInfo.travelInfo"></textarea>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label for="usr">What are some of your favorite hobbies?</label>
+                                    <textarea class="form-control" rows="3" id="comment" placeholder="List hobbies you enjoy" value.bind="additionalInfo.hobbiesInfo"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer row">
+                            <div class="col-md-12">
+                                <button type="button" class="btn btn-secondary text-center step step-4" click.trigger="moveBack()">Back</button>
+                                <button type="button" class="btn btn-secondary text-center step step-4" click.trigger="complete()">Skip and Finish Later</button>
+                                <button type="button" class="btn btn-primary text-center step step-4" click.trigger="updateAdditionalInfo()">Complete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</template>

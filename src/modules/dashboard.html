@@ -1,0 +1,38 @@
+<template>
+    <require from= "nav-bar"></require>
+    <require from= "utility-bar"></require>
+    <require from= "modules/uploads/new-upload-package"></require>
+    <require from= "modules/clippn-university"></require>
+    <require from= "modules/uploads/uploads-in-progress"></require>
+    <require from= "modules/release-templates"></require>
+
+    <nav-bar router.bind= "router" user.bind= "user" uploadManager.bind= "uploadManager"></nav-bar>
+    <utility-bar uploadManager.bind= "uploadManager"></utility-bar>
+    <div class= "page-host">
+        <router-view></router-view>
+    </div>
+    <footer class= "clippn-black-bkg footer clearfix">
+        <div class= "container">
+            <div class= "col-sm-12 text-center"> <!-- <img class= "powered-by-logo" alt= "Powered By Clippn" src= "images/powered-by" onerror= "this.style.display='none'"> -->
+                <p class= "copy">Copyright 2018 Clippn. All rights reserved.&nbsp;&nbsp;<a href= "#/dashboard/privacy">Privacy Policy</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href= "#/dashboard/terms-of-use">Terms of Use</a>
+                </p>
+                <a class="btn btn-social-icon btn-twitter" href="https://twitter.com/Clippn_Inc" target="_blank">
+               <span class="fa fa-twitter"></span>
+                 </a>
+                <a class="btn btn-social-icon btn-facebook"  href="https://www.facebook.com/clippn/" target="_blank">
+                <span class="fa fa-facebook"></span>
+                </a>
+                <a class="btn btn-social-icon btn-instagram" href= "https://www.instagram.com/clippn_inc/" target="_blank">
+                <span class="fa fa-instagram"></span>
+                </a>
+                <a class="btn btn-social-icon btn-linkedin"  href="https://www.linkedin.com/company/clippn" target="_blank">
+                <span class="fa fa-linkedin"></span>
+                </a>
+            </div>
+        </div>
+    </footer>
+    <new-upload-package></new-upload-package>
+    <clippn-university></clippn-university>
+    <uploads-in-progress></uploads-in-progress>
+    <release-templates></release-templates>
+</template>

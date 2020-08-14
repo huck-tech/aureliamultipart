@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clippn | DASHBOARD</title>
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link href="logo.css" rel="stylesheet">
+    <!-- <link href="src/bootstrap-theme.min.css" rel="stylesheet"> -->
+    <link href="src/main.css" rel="stylesheet">
+    <link href="dist/site.css" rel="stylesheet">
+</head>
+<body data-spy="scroll" data-target="#menu" data-offset="50" aurelia-app="main">
+    <div id="wrapper">
+        <div id="app-loader">
+            <div class="pagination-centered">
+                <div class="col-lg-offset-3 col-lg-6 col-md-offset-3 col-md-6 col-sm-offset-3 col-sm-6 col-xs-offset-3 col-xs-6" style="margin-top: 15%;">
+                    <div class="text-center dashboard-app-loader">
+                        <img src="images/clippn-logo" class="loading-logo" />
+                        <p class="lead text-center">
+                            Loading your dashboard...
+                        </p>
+                        <div class="progress progress-striped active loading-progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                        </div>
+                        <!-- <img class="powered-by-logo" alt="Powered By Clippn" src="images/powered-by" onerror="this.style.display='none'" style="margin-top: 30px;"> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var escape = function(value) {
+                return !value ? '' : value
+                    .replace(/\\/g, '\\\\').replace(/\"/g, '\\"')
+                    .replace(/\//g, '\/\/').replace(/[\b]/g, '\\b')
+                    .replace(/\f/g, '\\f').replace(/\n/g, '\\n')
+                    .replace(/\r/g, '\\r').replace(/\t/g, '\\t');
+            };
+            var XHR = window.XMLHttpRequest || function() {
+                try { return new ActiveXObject("Msxml3.XMLHTTP"); } catch (e0) {}
+                try { return new ActiveXObject("Msxml2.XMLHTTP.6.0"); } catch (e1) {}
+                try { return new ActiveXObject("Msxml2.XMLHTTP.3.0"); } catch (e2) {}
+                try { return new ActiveXObject("Msxml2.XMLHTTP"); } catch (e3) {}
+                try { return new ActiveXObject("Microsoft.XMLHTTP"); } catch (e4) {}
+            };
+            window.onerror = function(message, source, line, column, error) {
+                try {
+                    var xhr = new XHR();
+                    xhr.open('POST', '/errors', true);
+                    xhr.setRequestHeader('Content-type', 'application/json');
+                    xhr.send('{ ' +
+                        '"message": "' + escape(message || '') + '",' +
+                        '"stackTrace": "' + escape(error ? error.stack || '' : '') + '",' +
+                        '"source": "' + escape(source || '') + '",' +
+                        '"url": "' + escape(window.location.href) + '",' +
+                        '"line": "' + (line || 0) + '",' +
+                        '"column": "' + (column || 0) + '"' +
+                    '}');
+                }
+                finally {
+                    // Display a friendly message to the user.
+                }
+            };
+        </script>
+        <script src="jspm_packages/system.js"></script>
+        <script src="config.js"></script>
+        <script src="https://js.braintreegateway.com/web/dropin/1.9.4/js/dropin.min.js"></script>
+        <script>
+                System.import('aurelia-bootstrapper');
+        </script>        
+
+
+    </div>
+</body>
+</html>

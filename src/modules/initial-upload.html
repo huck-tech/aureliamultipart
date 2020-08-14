@@ -1,0 +1,107 @@
+<template>
+  <require from="modules/uploads/new-upload-package"></require>
+  <div id="initial-upload" class="col-lg-offset-2 col-lg-8 col-md-offset-1 col-md-10 col-sm-offset-1 col-sm-10 flex-centered flex-column">
+    <div class="flex-centered flex-column initial-upload" if.bind="step === 1">
+      <div id="tutorial">
+        <h2 class="initial-upload-title">
+          <i class="fa fa-graduation-cap"></i> CLIPPN UNIVERSITY - THE CLIPPN WAY</h2>
+        <p class="initial-upload-help">This 11 minute video shows you all you need to know to become a successful stock footage contributor at Clippn. Once
+          you finish the video, you will be able to upload your 10 sample clips for review. Thanks for watching!</p>
+      </div>
+      <div class="flex-centered tutorial-video-container">
+        <video id="tutorialVideo" class="tutorial-video" controls seeking.trigger="handleSeek()" timeupdate.trigger="updateProgress()"
+          ended.trigger="handleCompletion()" src="${config.tutorialVideoUrl}"></video>
+      </div>
+      <div if.bind="progressPercentage > 0" class="progress" style="align-self: stretch;">
+        <div class="progress-bar progress-bar-success" role="progressbar" css="width: ${progressPercentage}%"></div>
+      </div>
+    </div>
+    <div class="flex-centered flex-column initial-upload" if.bind="step === 2">
+      <div id="helpBlurb" class="flex-centered flex-column">
+        <h2 class="initial-upload-title">
+          <i class="fa fa-cloud-upload"></i> UPLOAD YOUR SAMPLE CLIPS! </h2>
+        <p class="initial-upload-help">Please submit 10 sample clips for review.</p>
+        <p class="initial-upload-help">Sample clips can be raw or edited, just make sure you own the rights and remember to always backup your footage before
+          you upload.</p>
+        <i class="initial-upload-help validation-warning">Please note that refreshing this page or navigating away from your Clippn Dashboard while uploads are still in progress
+          will cause your uploads to be canceled.</i>
+      </div>
+      <div id="uploadButton" if.bind="uploadsRemaining > 0">
+        <div class="btn-group col-lg-2 nav-upload-item pull-right no-padding">
+          <button class="upload-files-button btn navbar-btn btn-success pull-right" data-toggle="modal" data-target="#myUpload">
+            <i class="fa fa-cloud-upload"></i>UPLOAD CLIPS</button>
+        </div>
+      </div>
+      <div id="uploadsCount" style="margin-top: 20px;">
+        <h2>${numClipsUploaded} of ${numClipsRequired} Clips Uploaded</h2>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 ${uploadManager.hasFailures ? 'upload-alert' : ''}" if.bind="uploadManager.isUploading || uploadManager.hasFailures"
+        style="margin-top: 15px;">
+        <div class="label">
+          <i if.bind="uploadManager.hasFailures" class="fa fa-exclamation-triangle"></i>
+          <span if.bind="uploadManager.isUploading" class="lato-light">UPLOADING:</span>
+          <span if.bind="uploadManager.isUploading"> ${uploadManager.uploadsInProgress} Files</span>
+          <span if.bind="uploadManager.hasFailures && !uploadManager.isUploading"
+            class="label lato-light" style="font-weight: bold; font-size: 10pt; color: #d9534f;">UPLOADS FAILED</span>
+          <a if.bind="uploadManager.hasFailures && !uploadManager.initiatingRetry" style="float: right; cursor: pointer;"
+            click.trigger="uploadManager.clearErrors()">[X] Clear</a>
+          <a if.bind="uploadManager.hasFailures && !uploadManager.initiatingRetry" style="float: right; cursor: pointer; margin-right: 20px;"
+            click.trigger="uploadManager.retryFailedUploads()">
+            <i class="fa fa-refresh"></i> Retry</a>
+          <span if.bind="uploadManager.initiatingRetry" class="pull-right">Retrying...</span>
+        </div>
+        <div class="progress" style="margin-top: 3px; margin-bottom: 8px;">
+          <div class="progress-bar progress-bar-${uploadManager.hasFailures ? 'danger' : 'success'}" role="progressbar" aria-valuenow="${uploadManager.percentComplete}"
+            aria-valuemin="0" aria-valuemax="100" css="width: ${uploadManager.percentComplete}%">
+            <span class="sr-only">${uploadManager.percentComplete}% Complete (success)</span>
+          </div>
+        </div>
+        <div if.bind="uploadManager.hasFailures" class="label pull-right" style="font-size: 10pt;">
+          <span>${uploadManager.uploadsFailed} FAILED</span>
+        </div>
+      </div>
+    </div>
+    <div class="flex-centered flex-column initial-upload" if.bind="step === 3">
+      <div>
+        <h2 class="initial-upload-title">Thanks for uploading!</h2>
+        <p style="font-size: 14pt;"> We will get back to you within 72 hours and you will either be certified as a Clippn shooter and given full access
+          to our distribution streams or we will give you feedback for another try.
+          <br/>
+          <br/> We look forward to seeing and selling your clips,
+          <br />
+          <br /> Team Clippn </p>
+      </div>
+    </div>
+    <div style="align-self: flex-end; margin-top: 30px;" if.bind="step === 1 && tutorialCompleted">
+      <a href="#/initial-upload" click.trigger="goToUploads()">
+        <h4>
+          <i class="fa fa-arrow-right"></i> Upload Clips</h4>
+      </a>
+    </div>
+    <div style="align-self: stretch; display: flex; flex-direction: row; margin-top: 30px;" if.bind="step === 2">
+      <div style="justify-content: flex-start;">
+        <a href="#/initial-upload" click.trigger="goToTutorial()">
+          <h4>
+            <i class="fa fa-arrow-left"></i> Tutorial Video</h4>
+        </a>
+      </div>
+      <div style="flex: 1;"></div>
+      <div style="justify-content: flex-end;" if.bind="uploadsCompleted">
+        <a href="#/initial-upload" click.trigger="goToCompletionNotice()">
+          <h4>
+            <i class="fa fa-arrow-right"></i> Completion Notice</h4>
+        </a>
+      </div>
+    </div>
+    <div style="align-self: flex-start; margin-top: 30px;" if.bind="step === 3">
+      <a href="#/initial-upload" click.trigger="goToUploads()">
+        <h4>
+          <i class="fa fa-arrow-left"></i> Upload Clips</h4>
+      </a>
+    </div>
+    <div id="initial-upload-logout" style="margin-top: 40px;">
+      <a href="#" click.trigger="logout()">LOG OUT</a>
+    </div>
+  </div>
+  <new-upload-package is-initial-upload.bind="true" clip-limit.bind="uploadsRemaining"></new-upload-package>
+</template>

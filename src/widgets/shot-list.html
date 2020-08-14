@@ -1,0 +1,13 @@
+<template>
+    <!--<div class="row no-margin">-->
+    <div id="shot-list" class= "col-lg-12 col-md-12 col-sm-12 col-xs-12 inline-scroll">
+        <h5 class= "clippn-dark-gray-bkg" style= "margin: 0; padding: 10px 0;"><i class="fa fa-camera"></i> SHOT LIST</h5>
+        <ul class= "no-padding suggestion-select">
+            <li repeat.for= "shotSuggestion of shotSuggestionManager.suggestedShots">
+                <p class= "col-lg-9">${shotSuggestion.description}</p>
+                <button class= "btn btn-secondary pull-right">
+                    <!--<span class="suggestion-select-item-1 shot-add"><i class="fa fa-camera"></i> ADD</span>--><span class= "suggestion-selected shotlist-remove" click.delegate= "shotSuggestionManager.removeShot(shotSuggestion)">REMOVE</span> </button>
+            </li>
+        </ul>
+    </div>
+</template>

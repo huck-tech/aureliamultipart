@@ -1,0 +1,50 @@
+<template>
+    <div if.bind='isAdmin'>
+            <div style="margin-top: 50px;">
+                <form if.bind="isAdmin" class="register-form" submit.trigger="addNewUser()" validation-renderer="register">
+                    <div class="col-md-4">
+                        <h3 class="center">Add User</h3>                                            
+                        <div class="register-field">
+                            <label>First Name</label>
+                        </div>
+                        <div class="register-field">
+                            <input class= "form-control" type="text" value.bind="firstName & validate" />
+                        </div>
+                        <div class="register-field">
+                            <label>Last Name</label>
+                        </div>
+                        <div class="register-field">
+                            <input class= "form-control" type="text" value.bind="lastName & validate" />
+                        </div>
+                        <div class="register-field">
+                            <label>Email</label>
+                        </div>
+                        <div class="register-field">
+                            <input class= "form-control" type="email" value.bind="email & validate" /> 
+                        </div>
+                        <div class="register-field">
+                                <label>Role</label>
+                        </div>
+                        <div class="register-field">
+                            <select style="width:95%;" class="form-control center-block" value.bind="selectedRole" >
+                                <option value='rep'>Rep</option>
+                                <option value="adm">Admin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="margin: 15px; margin-left: 30px; display: flex; flex-direction: column; align-items: center;">
+                        <input if.bind="!isRegistering" class="btn btn-primary text-center" style="width: 150px;" type="submit" value="Create User"
+                        />
+                        <!-- <div if.bind="!isCreated" class="progress progress-striped active" style="width: 250px;">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                        </div> -->
+                        <span if.bind="hasError" class="error" style="margin-top: 10px;">${errorMsg}</span>
+                    </div>
+                </form>
+                <div if.bind="isCreated" style="margin: 100px auto; width: 70%; display: flex; flex-direction: column; align-items: center; text-align: center;">
+                    <h3 style="text-transform: none;">Congratulations! You've successfully registered a new rep with Clippn.</h3>
+                    <h4 style="text-transform: none;">They'll receive an email with a welcome letter and further instructions.</h4>
+                </div>
+            </div>
+    </div>    
+</template>
